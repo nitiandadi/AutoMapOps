@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <!-- OpenDRIVE 文件头：本示例使用 1.6 版本 -->
+    <header
+        revMajor="1"
+        revMinor="6"
+        name="Minimal Straight Road"
+        version="1.0"
+        date="2026-07-30"
+        north="10.0"
+        south="-10.0"
+        east="100.0"
+        west="0.0"
+        vendor="snartdrivingLearn"/>
+
+    <!--
+        一条 100 米长的道路。
+        junction="-1" 表示它不属于任何路口。
+    -->
+    <road
+        name="Straight Road"
+        length="100.0"
+        id="1"
+        junction="-1">
+
+        <!-- 道路参考线的平面几何 -->
+        <planView>
+            <!--
+                从世界坐标 (0, 0) 出发；
+                s=0 表示该几何段从道路起点开始；
+                hdg=0 弧度表示朝 x 轴正方向；
+                line 表示这是一条直线。
+            -->
+            <geometry
+                s="0.0"
+                x="0.0"
+                y="0.0"
+                hdg="0.0"
+                length="100.0">
+                <line/>
+            </geometry>
+        </planView>
+
+        <lanes>
+            <!-- 本例从 s=0 开始只有一个车道截面 -->
+            <laneSection s="0.0">
+                <!-- id=0 是道路参考线，不是可行驶车道 -->
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="standard"
+                            width="0.15"/>
+                    </lane>
+                </center>
+
+                <!-- 参考线右侧的车道使用负数编号 -->
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <!--
+                            width 是关于局部纵向距离 ds 的三次多项式：
+                            width(ds) = a + b*ds + c*ds² + d*ds³
+                            本例只有 a=3.5，因此全程恒定宽 3.5 米。
+                        -->
+                        <width
+                            sOffset="0.0"
+                            a="3.5"
+                            b="0.0"
+                            c="0.0"
+                            d="0.0"/>
+
+                        <!-- 该车道右侧外边界使用实线 -->
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="standard"
+                            width="0.15"/>
+                    </lane>
+                </right>
+                        <!-- 参考线右侧的车道使用负数编号 -->
+                <left>
+                    <lane id="1" type="driving" level="false">
+                        <!--
+                            width 是关于局部纵向距离 ds 的三次多项式：
+                            width(ds) = a + b*ds + c*ds² + d*ds³
+                            本例只有 a=3.5，因此全程恒定宽 3.5 米。
+                        -->
+                        <width
+                            sOffset="0.0"
+                            a="3.5"
+                            b="0.0"
+                            c="0.0"
+                            d="0.0"/>
+
+                        <!-- 该车道右侧外边界使用实线 -->
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="standard"
+                            width="0.15"/>
+                    </lane>
+                </left>
+            </laneSection>
+        </lanes>
+    </road>
+</OpenDRIVE>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header
+        revMajor="1"
+        revMinor="6"
+        name="Curved Multilane Road"
+        version="1.0"
+        date="2026-07-31"
+        north="65.0"
+        south="-10.0"
+        east="195.0"
+        west="-10.0"
+        vendor="snartdrivingLearn"/>
+
+    <!--
+        练习场景：
+        0~80 m   为直线；
+        80~200 m 为半径 125 m 的左转圆弧；
+        起点有双向各一条车道；
+        s=80 后，右侧新增一条车道，并在 40 m 内平滑展宽到 3.5 m。
+    -->
+    <road
+        name="Curved Multilane Road"
+        length="200.0"
+        id="1"
+        junction="-1"
+        rule="RHT">
+
+        <!-- 道路限速 60 km/h -->
+        <type s="0.0" type="rural">
+            <speed max="60" unit="km/h"/>
+        </type>
+
+        <planView>
+            <!-- 第一段：从 (0,0) 沿 x 正方向行驶 80 m -->
+            <geometry
+                s="0.0"
+                x="0.0"
+                y="0.0"
+                hdg="0.0"
+                length="80.0">
+                <line/>
+            </geometry>
+
+            <!--
+                第二段：从 (80,0) 开始左转。
+                curvature=0.008 m^-1，圆弧半径 R=1/0.008=125 m。
+            -->
+            <geometry
+                s="80.0"
+                x="80.0"
+                y="0.0"
+                hdg="0.0"
+                length="120.0">
+                <arc curvature="0.008"/>
+            </geometry>
+        </planView>
+
+        <!--
+            0~100 m：以 2% 坡度缓慢上坡，到达 2 m 高程；
+            100~200 m：保持 2 m 高程。
+        -->
+        <elevationProfile>
+            <elevation s="0.0" a="0.0" b="0.02" c="0.0" d="0.0"/>
+            <elevation s="100.0" a="2.0" b="0.0" c="0.0" d="0.0"/>
+        </elevationProfile>
+
+        <lanes>
+            <!-- ==================== 车道截面 1：s=0~80 ==================== -->
+            <laneSection s="0.0">
+                <!-- 参考线左侧第一条车道，行驶方向与 s 相反 -->
+                <left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <successor id="1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="white"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </left>
+
+                <!-- id=0 是参考线，不是可行驶车道 -->
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <link>
+                            <successor id="0"/>
+                        </link>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="yellow"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </center>
+
+                <!-- 参考线右侧第一条车道，行驶方向与 s 相同 -->
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="white"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+
+            <!-- =================== 车道截面 2：s=80~200 =================== -->
+            <laneSection s="80.0">
+                <left>
+                    <lane id="1" type="driving" level="false">
+                        <link>
+                            <predecessor id="1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="white"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </left>
+
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <link>
+                            <predecessor id="0"/>
+                        </link>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="yellow"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </center>
+
+                <right>
+                    <!-- 内侧车道继续存在；它与新增车道之间允许向右变道 -->
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark
+                            sOffset="0.0"
+                            type="broken"
+                            weight="standard"
+                            color="white"
+                            width="0.15"
+                            laneChange="both"/>
+                    </lane>
+
+                    <!--
+                        新增的 lane -2 没有 predecessor。
+                        它从 0 m 平滑展宽到 3.5 m：
+
+                        0~40 m:
+                          width(ds) = 0.0065625*ds² - 0.000109375*ds³
+
+                        40~120 m:
+                          width(ds) = 3.5 m
+                    -->
+                    <lane id="-2" type="driving" level="false">
+                        <width
+                            sOffset="0.0"
+                            a="0.0"
+                            b="0.0"
+                            c="0.0065625"
+                            d="-0.000109375"/>
+                        <width
+                            sOffset="40.0"
+                            a="3.5"
+                            b="0.0"
+                            c="0.0"
+                            d="0.0"/>
+                        <roadMark
+                            sOffset="0.0"
+                            type="solid"
+                            weight="standard"
+                            color="white"
+                            width="0.15"
+                            laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+</OpenDRIVE>

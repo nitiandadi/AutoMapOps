@@ -1,0 +1,5 @@
+add_subdirectory(map_core)
+add_subdirectory(map_io)
+add_subdirectory(map_validation)
+add_subdirectory(map_version)
+add_subdirectory(apps)

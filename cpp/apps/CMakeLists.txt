@@ -1,0 +1,1 @@
+add_subdirectory(automap_cli)

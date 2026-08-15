@@ -2,7 +2,7 @@
 
 AutoMapOps 是一个面向自动驾驶地图学习的 C++20 练习项目，目标是在物流园、矿区等封闭场景中跑通地图生产、质检、版本发布、车端地图包和运行时消费的最小闭环。
 
-当前进度：M0、M1 和 M2-01 已完成，正在实现 Canonical Map Model 与物流园 V0。
+当前进度：M0、M1 和 M2-01～M2-08 已完成，正在设计物流园 V0 道路拓扑。
 
 ## 已实现
 
@@ -11,6 +11,8 @@ AutoMapOps 是一个面向自动驾驶地图学习的 C++20 练习项目，目�
 - 可运行的 `automap_cli`；
 - Canonical Map Model 分层与基础对象骨架；
 - `Point3d`、`Polyline3d`、`BoundingBox3d` 及基础几何算法；
+- Road、Lane、LaneBoundary 及基础拓扑、边界共享与跨越权限；
+- Junction、园区场景对象、车辆通行约束和完整 `MapData` 聚合根；
 - MSVC 构建与 CTest 自动测试。
 
 ## 构建

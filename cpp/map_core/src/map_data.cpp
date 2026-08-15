@@ -48,6 +48,23 @@ Station* MapData::find_station(std::string_view id) noexcept { return find_by_id
 const Station* MapData::find_station(std::string_view id) const noexcept {
     return find_by_id(stations, id);
 }
+OperationalArea* MapData::find_operational_area(std::string_view id) noexcept {
+    return find_by_id(operational_areas, id);
+}
+const OperationalArea* MapData::find_operational_area(std::string_view id) const noexcept {
+    return find_by_id(operational_areas, id);
+}
+RestrictedArea* MapData::find_restricted_area(std::string_view id) noexcept {
+    return find_by_id(restricted_areas, id);
+}
+const RestrictedArea* MapData::find_restricted_area(std::string_view id) const noexcept {
+    return find_by_id(restricted_areas, id);
+}
+VehicleProfile* MapData::find_vehicle_profile(std::string_view id) noexcept {
+    return find_by_id(vehicle_profiles, id);
+}
+const VehicleProfile* MapData::find_vehicle_profile(std::string_view id) const noexcept {
+    return find_by_id(vehicle_profiles, id);
+}
 
 }  // namespace automap::core
-

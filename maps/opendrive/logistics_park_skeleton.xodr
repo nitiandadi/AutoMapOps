@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="8"
+            name="AutoMap Logistics Park Skeleton"
+            version="0.1" date="2026-08-20"
+            north="90.0" south="-185.0" east="295.0" west="-55.0"
+            vendor="AutoMapOps">
+        <geoReference>
+            <![CDATA[
+            +proj=tmerc +lat_0=30.5728 +lon_0=104.0668 +k=1
+            +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs
+        ]]>
+        </geoReference>
+    </header>
+    <!--
+        园区道路骨架：
+
+        主线路径：Road 1 → Junction 10 → Road 2 → Junction 20 → Road 4
+        绕行路径：Road 1 → Junction 10 → Road 3 → Junction 20 → Road 4
+        回程路径：Road 4 → Road 5 → Road 1
+
+        Road 2 是可被动态封闭的主路中段，Road 3 是装卸区绕行路线。
+        全部普通道路采用单向 RHT 右侧车道，形成完整闭环。
+    -->
+    <!-- 园区入口至分流路口：两条同向车道。 -->
+    <road name="Gate Entry Road" length="50.0" id="1" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="5" contactPoint="end"/>
+            <successor elementType="junction" elementId="10"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="8.33" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="0.0" y="0.0" hdg="0.0" length="50.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <!-- lane -1 可直行，也可通过 Junction 10 进入绕行支路。 -->
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <!-- lane -2 只在主路上直行。 -->
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- 两个 Junction 之间的主路中段：后续动态施工封路的目标。 -->
+    <road name="Main Distribution Road" length="110.0" id="2" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10"/>
+            <successor elementType="junction" elementId="20"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="8.33" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="55.0" y="0.0" hdg="0.0" length="110.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!--
+        上方装卸区绕行道路：一条低速车道。
+        几何为：北向直线 -> 右转圆弧 -> 东向直线 -> 右转圆弧 -> 南向直线。
+    -->
+    <road name="Loading Area Detour" length="174.2477796076938"
+          id="3" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10"/>
+            <successor elementType="junction" elementId="20"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="5.56" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="70.0" y="20.0"
+                      hdg="1.5707963267948966" length="30.0">
+                <line/>
+            </geometry>
+            <geometry s="30.0" x="70.0" y="50.0"
+                      hdg="1.5707963267948966" length="47.12388980384689">
+                <arc curvature="-0.03333333333333333"/>
+            </geometry>
+            <geometry s="77.12388980384689" x="100.0" y="80.0"
+                      hdg="0.0" length="20.0">
+                <line/>
+            </geometry>
+            <geometry s="97.12388980384689" x="120.0" y="80.0"
+                      hdg="0.0" length="47.12388980384689">
+                <arc curvature="-0.03333333333333333"/>
+            </geometry>
+            <geometry s="144.2477796076938" x="150.0" y="50.0"
+                      hdg="-1.5707963267948966" length="30.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- 汇流后的园区出口段：两条同向车道。 -->
+    <road name="Park Exit Road" length="70.0" id="4" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="20"/>
+            <successor elementType="road" elementId="5" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="8.33" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="170.0" y="0.0" hdg="0.0" length="70.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!--
+        南侧回程闭环。四个半径 50 m 的右转圆弧与三段直线把 Road 4
+        的终点重新接回 Road 1 的起点，确保车辆可以返回分拨中心。
+    -->
+    <road name="Return Loop Road" length="714.1592653589793"
+          id="5" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="4" contactPoint="end"/>
+            <successor elementType="road" elementId="1" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="8.33" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="240.0" y="0.0" hdg="0.0"
+                      length="78.53981633974483">
+                <arc curvature="-0.02"/>
+            </geometry>
+            <geometry s="78.53981633974483" x="290.0" y="-50.0"
+                      hdg="-1.5707963267948966" length="80.0">
+                <line/>
+            </geometry>
+            <geometry s="158.53981633974483" x="290.0" y="-130.0"
+                      hdg="-1.5707963267948966" length="78.53981633974483">
+                <arc curvature="-0.02"/>
+            </geometry>
+            <geometry s="237.07963267948966" x="240.0" y="-180.0"
+                      hdg="-3.141592653589793" length="240.0">
+                <line/>
+            </geometry>
+            <geometry s="477.07963267948966" x="0.0" y="-180.0"
+                      hdg="-3.141592653589793" length="78.53981633974483">
+                <arc curvature="-0.02"/>
+            </geometry>
+            <geometry s="555.6194490192345" x="-50.0" y="-130.0"
+                      hdg="-4.71238898038469" length="80.0">
+                <line/>
+            </geometry>
+            <geometry s="635.6194490192345" x="-50.0" y="-50.0"
+                      hdg="-4.71238898038469" length="78.53981633974483">
+                <arc curvature="-0.02"/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- Junction 10 内的双车道直行连接道路。 -->
+    <road name="J10 Main Connector" length="5.0" id="101" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="2" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="5.56" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="50.0" y="0.0" hdg="0.0" length="5.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false"/>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- Junction 10 内进入装卸绕行道路的左转连接道路。 -->
+    <road name="J10 Detour Connector" length="31.41592653589793"
+          id="102" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="3" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="5.56" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="50.0" y="0.0" hdg="0.0"
+                      length="31.41592653589793">
+                <arc curvature="0.05"/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false"/>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- Junction 20 内主路双车道直行连接道路。 -->
+    <road name="J20 Main Connector" length="5.0" id="201" junction="20" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="2" contactPoint="end"/>
+            <successor elementType="road" elementId="4" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="5.56" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="165.0" y="0.0" hdg="0.0" length="5.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false"/>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="broken" weight="standard"
+                                  color="white" width="0.15" laneChange="both"/>
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2"/>
+                            <successor id="-2"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!-- Junction 20 内绕行道路汇入主路的左转连接道路。 -->
+    <road name="J20 Detour Merge Connector" length="31.41592653589793"
+          id="202" junction="20" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="3" contactPoint="end"/>
+            <successor elementType="road" elementId="4" contactPoint="start"/>
+        </link>
+        <type s="0.0" type="town">
+            <speed max="5.56" unit="m/s"/>
+        </type>
+        <planView>
+            <geometry s="0.0" x="150.0" y="20.0"
+                      hdg="-1.5707963267948966" length="31.41592653589793">
+                <arc curvature="0.05"/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false"/>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    <!--
+        Junction 10：入口 Road 1 在这里分成主路和装卸区绕行道路。
+        lane -1 可以选择主路或绕行路线，lane -2 只能进入主路。
+    -->
+    <junction name="Depot Route Split" id="10" type="default">
+        <connection id="0" incomingRoad="1" connectingRoad="101" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+            <laneLink from="-2" to="-2"/>
+        </connection>
+        <connection id="1" incomingRoad="1" connectingRoad="102" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+    </junction>
+    <!-- Junction 20：主路与装卸区绕行路线重新汇合。 -->
+    <junction name="Depot Route Merge" id="20" type="default">
+        <connection id="0" incomingRoad="2" connectingRoad="201" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+            <laneLink from="-2" to="-2"/>
+        </connection>
+        <connection id="1" incomingRoad="3" connectingRoad="202" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+    </junction>
+</OpenDRIVE>

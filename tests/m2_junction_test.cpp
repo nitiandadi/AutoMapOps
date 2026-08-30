@@ -7,7 +7,7 @@
 namespace {
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -33,29 +33,29 @@ int main() {
     };
 
     passed &= check(turn_direction_name(left_turn.turn_direction) == "left",
-                    "Turn direction should have a stable serialized name.");
+                    "转向类型应具有稳定的序列化名称。");
     passed &= check(turn_direction_name(TurnDirection::u_turn) == "u_turn",
-                    "U-turn should have a stable serialized name.");
+                    "掉头类型应具有稳定的序列化名称。");
     passed &= check(left_turn.junction_id == junction.id,
-                    "A lane connection should identify its owning junction.");
+                    "LaneConnection 应标识所属 Junction。");
     passed &= check(left_turn.incoming_lane_id == "lane_gate_in" &&
                         left_turn.connecting_lane_id == "lane_gate_left_connector" &&
                         left_turn.outgoing_lane_id == "lane_west_out",
-                    "A permitted movement should preserve all three lane roles.");
+                    "允许的通行动作应保存入口、连接和出口三种 Lane 角色。");
 
     MapData map;
     map.junctions.push_back(junction);
     map.lane_connections.push_back(left_turn);
     const MapData& const_map = map;
     passed &= check(const_map.find_junction(junction.id) != nullptr,
-                    "MapData should find a junction.");
+                    "MapData 应能查找 Junction。");
     const LaneConnection* found = const_map.find_lane_connection(left_turn.id);
     passed &= check(found != nullptr && *found == left_turn,
-                    "MapData should find and compare a lane connection.");
+                    "MapData 应能查找并比较 LaneConnection。");
 
     if (!passed) {
         return 1;
     }
-    std::cout << "AutoMapOps M2 junction test passed.\n";
+    std::cout << "AutoMapOps M2 Junction 测试通过。\n";
     return 0;
 }

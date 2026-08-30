@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenDRIVE>
+    <header
+        revMajor="1"
+        revMinor="6"
+        name="Junction Straight And Left"
+        version="1.0"
+        date="2026-08-18"
+        north="105.0"
+        south="-10.0"
+        east="185.0"
+        west="-10.0"
+        vendor="snartdrivingLearn"/>
+
+    <!-- 入口道路：终点进入 Junction 10。 -->
+    <road name="Incoming Road" length="80.0" id="1" junction="-1" rule="RHT">
+        <link>
+            <successor elementType="junction" elementId="10"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="0.0" y="0.0" hdg="0.0" length="80.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <!-- 不在这里写两个 successor；分流关系由 junction/laneLink 表达。 -->
+                    <lane id="-1" type="driving" level="false">
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- 直行出口道路：起点来自 Junction 10。 -->
+    <road name="Straight Outgoing Road" length="80.0" id="2" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="100.0" y="0.0" hdg="0.0" length="80.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!-- 左转出口道路：从 (100,20) 向北延伸。 -->
+    <road name="Left Outgoing Road" length="80.0" id="3" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="100.0" y="20.0"
+                      hdg="1.5707963267948966" length="80.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!--
+        Junction 内的直行连接道路。
+        它从入口 Road 1 的 end 接到出口 Road 2 的 start。
+    -->
+    <road name="Straight Connecting Road" length="20.0"
+          id="100" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="2" contactPoint="start"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="80.0" y="0.0" hdg="0.0" length="20.0">
+                <line/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!--
+        Junction 内的左转连接道路。
+        半径 20 m、转角 90°，因此长度为 pi/2*20 = 31.4159 m。
+        圆弧终点为 (100,20)，航向为 pi/2，与 Road 3 连续。
+    -->
+    <road name="Left Connecting Road" length="31.41592653589793"
+          id="101" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end"/>
+            <successor elementType="road" elementId="3" contactPoint="start"/>
+        </link>
+        <planView>
+            <geometry s="0.0" x="80.0" y="0.0" hdg="0.0"
+                      length="31.41592653589793">
+                <arc curvature="0.05"/>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="yellow" width="0.15" laneChange="none"/>
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1"/>
+                            <successor id="-1"/>
+                        </link>
+                        <width sOffset="0.0" a="3.5" b="0.0" c="0.0" d="0.0"/>
+                        <roadMark sOffset="0.0" type="solid" weight="standard"
+                                  color="white" width="0.15" laneChange="none"/>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <!--
+        connection 只描述“入口 Road -> Connecting Road”。
+        Connecting Road 再通过自己的 road/lane successor 接到出口 Road。
+    -->
+    <junction name="Straight And Left Junction" id="10">
+        <!-- Road 1 lane -1 可以直行进入 Road 100 lane -1。 -->
+        <connection id="0" incomingRoad="1"
+                    connectingRoad="100" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+
+        <!-- 同一个 Road 1 lane -1 也可以左转进入 Road 101 lane -1。 -->
+        <connection id="1" incomingRoad="1"
+                    connectingRoad="101" contactPoint="start">
+            <laneLink from="-1" to="-1"/>
+        </connection>
+    </junction>
+</OpenDRIVE>

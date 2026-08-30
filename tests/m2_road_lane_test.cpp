@@ -8,7 +8,7 @@ namespace {
 
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -61,24 +61,24 @@ int main() {
     };
 
     passed &= check(polyline_length(road.reference_line) == 50.0,
-                    "Road should retain its 50 m reference line.");
+                    "Road 应保存长度为 50 m 的参考线。");
     passed &= check(road.lane_ids.size() == 2,
-                    "Road should retain all owned lane references.");
+                    "Road 应保存其全部 Lane 引用。");
     passed &= check(forward_lane.predecessor_ids == std::vector<ObjectId>{"lane_gate_entry"},
-                    "Lane should retain predecessor topology.");
+                    "Lane 应保存前驱拓扑。");
     passed &= check(forward_lane.successor_ids ==
                         std::vector<ObjectId>{"lane_junction_straight"},
-                    "Lane should retain successor topology.");
+                    "Lane 应保存后继拓扑。");
     passed &= check(forward_lane.width_m == 3.5 && forward_lane.speed_limit_mps == 5.0,
-                    "Lane should retain width and speed limit in SI units.");
+                    "Lane 应以 SI 单位保存宽度和限速。");
     passed &= check(lane_side_name(forward_lane.side) == "right",
-                    "Lane side should have a stable serialized name.");
+                    "Lane 侧别应具有稳定的序列化名称。");
     passed &= check(lane_direction_name(forward_lane.direction) == "along_reference_line",
-                    "Lane direction should be relative to the road reference line.");
+                    "Lane 方向应相对于 Road 参考线定义。");
     passed &= check(lane_direction_name(reverse_lane.direction) == "against_reference_line",
-                    "Opposing traffic should be explicit.");
+                    "逆参考线行驶方向应被明确表达。");
     passed &= check(lane_status_name(LaneStatus::closed) == "closed",
-                    "Lane status should have a stable serialized name.");
+                    "Lane 状态应具有稳定的序列化名称。");
 
     MapData map;
     map.roads.push_back(road);
@@ -87,19 +87,19 @@ int main() {
 
     const MapData& const_map = map;
     passed &= check(const_map.find_road("road_main_01") != nullptr,
-                    "MapData should find a road by stable ID.");
+                    "MapData 应能通过稳定 ID 查找 Road。");
     const Lane* found_reverse_lane = const_map.find_lane("lane_main_01_reverse");
     passed &= check(found_reverse_lane != nullptr,
-                    "MapData should find a lane by stable ID.");
+                    "MapData 应能通过稳定 ID 查找 Lane。");
     if (found_reverse_lane != nullptr) {
         passed &= check(*found_reverse_lane == reverse_lane,
-                        "Lane should support value comparison for round-trip tests.");
+                        "Lane 应支持用于往返测试的值比较。");
     }
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "AutoMapOps M2 road and lane test passed.\n";
+    std::cout << "AutoMapOps M2 Road 与 Lane 测试通过。\n";
     return 0;
 }

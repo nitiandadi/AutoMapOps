@@ -8,7 +8,7 @@ namespace {
 
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -41,32 +41,32 @@ int main() {
     };
 
     passed &= check(polyline_length(shared_center.geometry) == 50.0,
-                    "Boundary should retain its geometry in metres.");
+                    "LaneBoundary 应以米为单位保存几何。");
     const auto bounds = bounding_box(shared_center.geometry);
     passed &= check(bounds.has_value() &&
                         bounds->contains(Point3d{20.0, 0.0, 0.0}),
-                    "Boundary geometry should work with the common geometry algorithms.");
+                    "LaneBoundary 几何应能使用公共几何算法。");
     passed &= check(lane_boundary_type_name(shared_center.type) == "dashed_line",
-                    "Boundary type should have a stable serialized name.");
+                    "边界类型应具有稳定的序列化名称。");
     passed &= check(lane_boundary_type_name(LaneBoundaryType::double_solid_line) ==
                         "double_solid_line",
-                    "Double solid line should have a stable serialized name.");
+                    "双实线应具有稳定的序列化名称。");
     passed &= check(lane_boundary_type_name(LaneBoundaryType::virtual_boundary) ==
                         "virtual_boundary",
-                    "Logical boundaries should be represented explicitly.");
+                    "逻辑边界应能被明确表达。");
     passed &= check(shared_center.crossing_allowed && !outer_edge.crossing_allowed &&
                         !curb.crossing_allowed,
-                    "Crossing permission should be independent and explicit.");
+                    "跨越权限应独立且明确地表达。");
 
     MapData map;
     map.lane_boundaries = {shared_center, outer_edge, curb};
 
     LaneBoundary* mutable_boundary = map.find_lane_boundary("boundary_main_center");
     passed &= check(mutable_boundary != nullptr,
-                    "MapData should find a mutable boundary by stable ID.");
+                    "MapData 应能通过稳定 ID 查找可修改的 LaneBoundary。");
     if (mutable_boundary != nullptr) {
         passed &= check(*mutable_boundary == shared_center,
-                        "Boundary should support value comparison for round-trip tests.");
+                        "LaneBoundary 应支持用于往返测试的值比较。");
         mutable_boundary->crossing_allowed = false;
     }
 
@@ -74,14 +74,14 @@ int main() {
     const LaneBoundary* found_boundary =
         const_map.find_lane_boundary("boundary_main_center");
     passed &= check(found_boundary != nullptr && !found_boundary->crossing_allowed,
-                    "Const lookup should observe a boundary update.");
+                    "只读查询应能观察到边界更新。");
     passed &= check(const_map.find_lane_boundary("boundary_missing") == nullptr,
-                    "Missing boundary lookup should return nullptr.");
+                    "查找不存在的 LaneBoundary 应返回 nullptr。");
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "AutoMapOps M2 lane boundary test passed.\n";
+    std::cout << "AutoMapOps M2 LaneBoundary 测试通过。\n";
     return 0;
 }

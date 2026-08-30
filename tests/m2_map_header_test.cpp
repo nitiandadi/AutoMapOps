@@ -7,7 +7,7 @@ namespace {
 
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -22,15 +22,15 @@ int main() {
 
     const CoordinateReference default_reference;
     passed &= check(default_reference.geodetic_datum == "WGS84",
-                    "The default geodetic datum should be WGS84.");
+                    "默认大地基准应为 WGS84。");
     passed &= check(default_reference.local_frame == LocalCoordinateFrame::enu,
-                    "The default local coordinate frame should be ENU.");
+                    "默认局部坐标系应为 ENU。");
     passed &= check(default_reference.linear_unit == "m",
-                    "The default linear unit should be metre.");
+                    "默认长度单位应为米。");
     passed &= check(default_reference.angle_unit == "rad",
-                    "The default angle unit should be radian.");
+                    "默认角度单位应为弧度。");
     passed &= check(local_coordinate_frame_name(default_reference.local_frame) == "enu",
-                    "The ENU frame should have a stable serialized name.");
+                    "ENU 坐标系应具有稳定的序列化名称。");
 
     const MapHeader header{
         .map_id = MapId{"logistics_park_demo"},
@@ -50,23 +50,23 @@ int main() {
     };
 
     passed &= check(header.map_id.value() == "logistics_park_demo",
-                    "MapHeader should retain its stable map ID.");
+                    "MapHeader 应保存稳定的地图 ID。");
     passed &= check(header.name == "Logistics Park Demo",
-                    "MapHeader should retain its display name.");
+                    "MapHeader 应保存地图显示名称。");
     passed &= check(header.schema_version == map_header_defaults::schema_version,
-                    "MapHeader should expose Canonical schema version 1.0.");
+                    "MapHeader 应提供 Canonical Schema 版本 1.0。");
     passed &= check(header.coordinate_reference.origin ==
                         GeodeticPoint{104.0668, 30.5728, 500.0},
-                    "MapHeader should retain its WGS84 ENU origin.");
+                    "MapHeader 应保存 WGS84 ENU 原点。");
 
     const MapHeader copied_header = header;
     passed &= check(copied_header == header,
-                    "MapHeader should support value comparison for round-trip tests.");
+                    "MapHeader 应支持用于往返测试的值比较。");
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "AutoMapOps M2 MapHeader test passed.\n";
+    std::cout << "AutoMapOps M2 MapHeader 测试通过。\n";
     return 0;
 }

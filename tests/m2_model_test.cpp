@@ -8,7 +8,7 @@ namespace {
 
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -22,17 +22,17 @@ int main() {
     bool passed = true;
     const Polyline3d polyline{{0.0, 0.0, 0.0}, {3.0, 4.0, 0.0}, {3.0, 4.0, 12.0}};
 
-    passed &= check(almost_equal(polyline_length(polyline), 17.0), "Polyline length should be 17 m.");
+    passed &= check(almost_equal(polyline_length(polyline), 17.0), "折线长度应为 17 m。");
     passed &= check(points_coincident({1.0, 2.0, 3.0}, {1.0005, 2.0, 3.0}),
-                    "Points within 1 mm should coincide.");
-    passed &= check(!bounding_box({}).has_value(), "An empty polyline should have no bounding box.");
+                    "相距不超过 1 mm 的点应视为重合。");
+    passed &= check(!bounding_box({}).has_value(), "空折线不应产生包围盒。");
 
     const auto bounds = bounding_box(polyline);
-    passed &= check(bounds.has_value(), "A non-empty polyline should have a bounding box.");
+    passed &= check(bounds.has_value(), "非空折线应产生包围盒。");
     if (bounds) {
-        passed &= check(bounds->min == Point3d{0.0, 0.0, 0.0}, "Bounding-box minimum is incorrect.");
-        passed &= check(bounds->max == Point3d{3.0, 4.0, 12.0}, "Bounding-box maximum is incorrect.");
-        passed &= check(bounds->contains({1.0, 2.0, 6.0}), "Bounding box should contain an inner point.");
+        passed &= check(bounds->min == Point3d{0.0, 0.0, 0.0}, "包围盒最小点不正确。");
+        passed &= check(bounds->max == Point3d{3.0, 4.0, 12.0}, "包围盒最大点不正确。");
+        passed &= check(bounds->contains({1.0, 2.0, 6.0}), "包围盒应包含内部点。");
     }
 
     MapData map{
@@ -54,15 +54,14 @@ int main() {
         .speed_limit_mps = 5.0,
     });
 
-    passed &= check(map.find_road("road_main") != nullptr, "MapData should find an existing road.");
-    passed &= check(map.find_lane("lane_main") != nullptr, "MapData should find an existing lane.");
-    passed &= check(map.find_lane("missing_lane") == nullptr, "MapData should return null for a missing lane.");
+    passed &= check(map.find_road("road_main") != nullptr, "MapData 应能找到已有 Road。");
+    passed &= check(map.find_lane("lane_main") != nullptr, "MapData 应能找到已有 Lane。");
+    passed &= check(map.find_lane("missing_lane") == nullptr, "查找不存在的 Lane 应返回 nullptr。");
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "AutoMapOps M2 model skeleton test passed.\n";
+    std::cout << "AutoMapOps M2 模型骨架测试通过。\n";
     return 0;
 }
-

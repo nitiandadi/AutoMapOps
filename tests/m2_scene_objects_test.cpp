@@ -7,7 +7,7 @@
 namespace {
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -41,13 +41,13 @@ int main() {
     };
 
     passed &= check(operational_area_type_name(loading_area.type) == "loading_area",
-                    "Operational area type should have a stable name.");
+                    "OperationalArea 类型应具有稳定的序列化名称。");
     passed &= check(station_type_name(loading_bay.type) == "loading_bay",
-                    "Station type should have a stable name.");
+                    "Station 类型应具有稳定的序列化名称。");
     passed &= check(loading_area.outline.front() == loading_area.outline.back(),
-                    "The example area outline should be closed.");
+                    "示例区域轮廓应为闭合折线。");
     passed &= check(loading_bay.access_lane_id == "lane_loading_a",
-                    "A station should identify its access lane.");
+                    "Station 应标识其接入 Lane。");
 
     MapData map;
     map.operational_areas.push_back(loading_area);
@@ -55,16 +55,16 @@ int main() {
     map.restricted_areas.push_back(narrow_passage);
     const MapData& const_map = map;
     passed &= check(const_map.find_operational_area(loading_area.id) != nullptr,
-                    "MapData should find an operational area.");
+                    "MapData 应能查找 OperationalArea。");
     passed &= check(const_map.find_station(loading_bay.id) != nullptr,
-                    "MapData should find a station.");
+                    "MapData 应能查找 Station。");
     const RestrictedArea* found = const_map.find_restricted_area(narrow_passage.id);
     passed &= check(found != nullptr && *found == narrow_passage,
-                    "MapData should find and compare a restricted area.");
+                    "MapData 应能查找并比较 RestrictedArea。");
 
     if (!passed) {
         return 1;
     }
-    std::cout << "AutoMapOps M2 scene objects test passed.\n";
+    std::cout << "AutoMapOps M2 场景对象测试通过。\n";
     return 0;
 }

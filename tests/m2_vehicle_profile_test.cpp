@@ -7,7 +7,7 @@
 namespace {
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -29,23 +29,23 @@ int main() {
     };
 
     passed &= check(vehicle_type_name(truck.type) == "truck",
-                    "Vehicle type should have a stable serialized name.");
+                    "车辆类型应具有稳定的序列化名称。");
     passed &= check(truck.width_m == 2.55 && truck.height_m == 4.0,
-                    "Vehicle width and optional height should use metres.");
+                    "车辆宽度和可选高度应使用米作为单位。");
     passed &= check(truck.length_m == 12.0 && truck.minimum_turning_radius_m == 10.5,
-                    "Basic passage constraints should be retained.");
+                    "车辆模型应保存基础通行约束。");
 
     MapData map;
     map.vehicle_profiles.push_back(truck);
     VehicleProfile* found = map.find_vehicle_profile(truck.id);
     passed &= check(found != nullptr && *found == truck,
-                    "MapData should find and compare a vehicle profile.");
+                    "MapData 应能查找并比较 VehicleProfile。");
     passed &= check(map.find_vehicle_profile("vehicle_missing") == nullptr,
-                    "Missing vehicle lookup should return nullptr.");
+                    "查找不存在的 VehicleProfile 应返回 nullptr。");
 
     if (!passed) {
         return 1;
     }
-    std::cout << "AutoMapOps M2 vehicle profile test passed.\n";
+    std::cout << "AutoMapOps M2 VehicleProfile 测试通过。\n";
     return 0;
 }

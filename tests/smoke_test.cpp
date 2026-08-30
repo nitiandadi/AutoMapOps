@@ -12,7 +12,7 @@ namespace {
 
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -31,35 +31,35 @@ int main() {
     bool passed = true;
     const MapId map_id{"logistics_park_demo"};
 
-    passed &= check(!map_id.empty(), "MapId should keep a non-empty value.");
+    passed &= check(!map_id.empty(), "MapId 应保存非空值。");
     passed &= check(
         automap::io::canonical_json_schema_version() == "1.0",
-        "Canonical JSON schema version should be 1.0.");
+        "Canonical JSON Schema 版本应为 1.0。");
 
     ValidationReport clean_report{map_id};
     const VersionPublisher publisher;
     const auto accepted = publisher.evaluate(map_id, VersionId{"V1"}, clean_report);
-    passed &= check(accepted.published, "A clean report should allow publication.");
+    passed &= check(accepted.published, "无问题的质检报告应允许发布。");
 
     ValidationReport blocked_report{map_id};
     blocked_report.add_issue(ValidationIssue{
         .rule_id = "SMOKE_ERROR",
         .severity = Severity::error,
         .object_id = "lane_demo",
-        .message = "Synthetic error for the M1 smoke test.",
-        .suggestion = "Remove the synthetic error.",
+        .message = "M1 冒烟测试使用的模拟错误。",
+        .suggestion = "移除模拟错误。",
     });
 
     const auto rejected = publisher.evaluate(map_id, VersionId{"V1"}, blocked_report);
-    passed &= check(!rejected.published, "An error should block publication.");
+    passed &= check(!rejected.published, "存在错误时应阻止发布。");
     passed &= check(
         blocked_report.count(Severity::error) == 1,
-        "ValidationReport should count one error.");
+        "ValidationReport 应统计到一个错误。");
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "AutoMapOps M1 smoke test passed.\n";
+    std::cout << "AutoMapOps M1 冒烟测试通过。\n";
     return 0;
 }

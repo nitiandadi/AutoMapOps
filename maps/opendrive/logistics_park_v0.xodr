@@ -1,0 +1,505 @@
+<?xml version='1.0' encoding='utf-8'?>
+<OpenDRIVE>
+    <header revMajor="1" revMinor="8" name="物流园 Canonical V0 草稿" version="0.1.0" date="2026-08-28" north="115.0" south="-185.0" east="295.0" west="-55.0" vendor="AutoMapOps">
+        <geoReference>+proj=tmerc +lat_0=30.5728 +lon_0=104.0668 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs</geoReference>
+        <userData code="automap.sourceMapId" value="logistics_park" />
+        <userData code="automap.sourceSchemaVersion" value="1.0" />
+    </header>
+    <road name="Gate Entry Road" length="50" id="1" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="5" contactPoint="end" />
+            <successor elementType="junction" elementId="10" />
+        </link>
+        <type s="0" type="town">
+            <speed max="8.33" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="0" y="0" hdg="0" length="50">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_entry_inner" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_entry_outer" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id="obj_gate" name="园区门岗" type="building" subtype="tollBooth" s="10" t="-1.75" zOffset="0" dynamic="no" orientation="none" length="3" width="2" height="3" hdg="0" pitch="0" roll="0">
+                <userData code="automap.canonicalStationId" value="station_gate" />
+                <userData code="automap.stationType" value="gate" />
+                <userData code="automap.accessLaneId" value="lane_entry_inner" />
+            </object>
+        </objects>
+        <userData code="automap.canonicalRoadId" value="road_entry" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="Main Distribution Road" length="110" id="2" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10" />
+            <successor elementType="junction" elementId="20" />
+        </link>
+        <type s="0" type="town">
+            <speed max="8.33" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="55" y="0" hdg="0" length="110">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_main_inner" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2" />
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_main_outer" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_main" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="Loading Area Detour" length="174.247779607694" id="3" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="10" />
+            <successor elementType="junction" elementId="20" />
+        </link>
+        <type s="0" type="town">
+            <speed max="5.56" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="70" y="20" hdg="1.5707963267949" length="30">
+                <line />
+            </geometry>
+            <geometry s="30" x="70" y="50" hdg="1.5707963267949" length="47.1238898038469">
+                <arc curvature="-0.0333333333333333" />
+            </geometry>
+            <geometry s="77.1238898038469" x="100" y="80" hdg="0" length="20">
+                <line />
+            </geometry>
+            <geometry s="97.1238898038469" x="120" y="80" hdg="0" length="47.1238898038469">
+                <arc curvature="-0.0333333333333333" />
+            </geometry>
+            <geometry s="144.247779607694" x="150" y="50" hdg="-1.5707963267949" length="30">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="5.56" />
+                        <userData code="automap.canonicalLaneId" value="lane_detour" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id="obj_warehouse_a" name="A 仓库" type="building" subtype="building" s="87.1238898038469" t="17" zOffset="0" dynamic="no" orientation="none" length="40" width="26" height="8" hdg="0" pitch="0" roll="0">
+                <userData code="automap.canonicalOperationalAreaId" value="area_warehouse_a" />
+                <userData code="automap.operationalAreaType" value="warehouse" />
+            </object>
+            <object id="obj_loading_area_a" name="A 仓装卸作业区" type="parkingSpace" subtype="openSpace" s="87.1238898038469" t="0" zOffset="0" dynamic="no" orientation="+" length="16" width="12" height="0" hdg="0" pitch="0" roll="0">
+                <parkingSpace access="all" restrictions="logistics_loading_area" />
+                <userData code="automap.canonicalOperationalAreaId" value="area_loading_a" />
+                <userData code="automap.operationalAreaType" value="loading_area" />
+            </object>
+            <object id="obj_loading_bay_a1" name="A1 月台" type="parkingSpace" subtype="openSpace" s="87.1238898038469" t="-1.75" zOffset="0" dynamic="no" orientation="+" length="12" width="3.5" height="0" hdg="0" pitch="0" roll="0">
+                <parkingSpace access="all" restrictions="logistics_loading_bay" />
+                <userData code="automap.canonicalStationId" value="station_loading_a1" />
+                <userData code="automap.stationType" value="loading_bay" />
+                <userData code="automap.accessLaneId" value="lane_detour" />
+            </object>
+            <object id="obj_narrow_passage" name="装卸区北向窄通道" type="roadSurface" subtype="other" s="15" t="-1.75" zOffset="0" dynamic="no" orientation="none" length="22" width="6.5" height="0" hdg="0" pitch="0" roll="0">
+                <userData code="automap.canonicalRestrictedAreaId" value="restricted_narrow_passage" />
+                <userData code="automap.allowedVehicleProfileIds" value="vehicle_delivery_van" />
+            </object>
+        </objects>
+        <userData code="automap.canonicalRoadId" value="road_detour" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="Park Exit Road" length="70" id="4" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="junction" elementId="20" />
+            <successor elementType="road" elementId="5" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="8.33" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="170" y="0" hdg="0" length="70">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_exit_inner" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_exit_outer" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_exit" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="Return Loop Road" length="714.159265358979" id="5" junction="-1" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="4" contactPoint="end" />
+            <successor elementType="road" elementId="1" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="8.33" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="240" y="0" hdg="0" length="78.5398163397448">
+                <arc curvature="-0.02" />
+            </geometry>
+            <geometry s="78.5398163397448" x="290" y="-50" hdg="-1.5707963267949" length="80">
+                <line />
+            </geometry>
+            <geometry s="158.539816339745" x="290" y="-130" hdg="-1.5707963267949" length="78.5398163397448">
+                <arc curvature="-0.02" />
+            </geometry>
+            <geometry s="237.07963267949" x="240" y="-180" hdg="-3.14159265358979" length="240">
+                <line />
+            </geometry>
+            <geometry s="477.07963267949" x="0" y="-180" hdg="-3.14159265358979" length="78.5398163397448">
+                <arc curvature="-0.02" />
+            </geometry>
+            <geometry s="555.619449019234" x="-50" y="-130" hdg="-4.71238898038469" length="80">
+                <line />
+            </geometry>
+            <geometry s="635.619449019234" x="-50" y="-50" hdg="-4.71238898038469" length="78.5398163397448">
+                <arc curvature="-0.02" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_return_inner" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2" />
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_return_outer" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <objects>
+            <object id="obj_parking_area" name="车辆待命停车区" type="parkingSpace" subtype="openSpace" s="294.57963267949" t="-19" zOffset="0" dynamic="no" orientation="+" length="45" width="22" height="0" hdg="0" pitch="0" roll="0">
+                <parkingSpace access="all" />
+                <userData code="automap.canonicalOperationalAreaId" value="area_parking" />
+                <userData code="automap.operationalAreaType" value="parking_area" />
+            </object>
+            <object id="obj_parking_01" name="1 号待命车位" type="parkingSpace" subtype="openSpace" s="295.07963267949" t="-16" zOffset="0" dynamic="no" orientation="+" length="6" width="3" height="0" hdg="0" pitch="0" roll="0">
+                <parkingSpace access="all" />
+                <userData code="automap.canonicalStationId" value="station_parking_01" />
+                <userData code="automap.stationType" value="parking_space" />
+                <userData code="automap.accessLaneId" value="lane_return_inner" />
+            </object>
+            <object id="obj_charging_area" name="新能源车充电区" type="parkingSpace" subtype="openSpace" s="443.07963267949" t="-18" zOffset="0" dynamic="no" orientation="+" length="28" width="20" height="0" hdg="0" pitch="0" roll="0">
+                <parkingSpace access="electric" restrictions="charging_area" />
+                <userData code="automap.canonicalOperationalAreaId" value="area_charging" />
+                <userData code="automap.operationalAreaType" value="charging_area" />
+            </object>
+            <object id="obj_charger_01" name="1 号充电桩" type="obstacle" subtype="chargingStation" s="443.07963267949" t="-18" zOffset="0" dynamic="no" orientation="none" length="1" width="1" height="2" hdg="0" pitch="0" roll="0">
+                <userData code="automap.canonicalStationId" value="station_charger_01" />
+                <userData code="automap.stationType" value="charging_point" />
+                <userData code="automap.accessLaneId" value="lane_return_inner" />
+            </object>
+        </objects>
+        <userData code="automap.canonicalRoadId" value="road_return" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="J10 Main Connector" length="5" id="101" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end" />
+            <successor elementType="road" elementId="2" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="5.56" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="50" y="0" hdg="0" length="5">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false" />
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="5.56" />
+                        <userData code="automap.canonicalLaneId" value="lane_j10_main_inner" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2" />
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="5.56" />
+                        <userData code="automap.canonicalLaneId" value="lane_j10_main_outer" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_j10_main_connector" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="J10 Detour Connector" length="31.4159265358979" id="102" junction="10" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="1" contactPoint="end" />
+            <successor elementType="road" elementId="3" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="5.56" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="50" y="0" hdg="0" length="31.4159265358979">
+                <arc curvature="0.05" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false" />
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="5.56" />
+                        <userData code="automap.canonicalLaneId" value="lane_j10_detour" />
+                        <userData code="automap.exportRole" value="canonical_road" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_j10_detour_connector" />
+        <userData code="automap.exportRole" value="canonical_road" />
+    </road>
+    <road name="J20 Main Connector" length="5" id="201" junction="20" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="2" contactPoint="end" />
+            <successor elementType="road" elementId="4" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="5.56" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="165" y="0" hdg="0" length="5">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false" />
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="broken" weight="standard" color="white" width="0.15" laneChange="both" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_main_inner" />
+                        <userData code="automap.exportRole" value="synthesized_merge_connector" />
+                    </lane>
+                    <lane id="-2" type="driving" level="false">
+                        <link>
+                            <predecessor id="-2" />
+                            <successor id="-2" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="8.33" />
+                        <userData code="automap.canonicalLaneId" value="lane_main_outer" />
+                        <userData code="automap.exportRole" value="synthesized_merge_connector" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_main" />
+        <userData code="automap.exportRole" value="synthesized_merge_connector" />
+    </road>
+    <road name="J20 Detour Merge Connector" length="31.4159265358979" id="202" junction="20" rule="RHT">
+        <link>
+            <predecessor elementType="road" elementId="3" contactPoint="end" />
+            <successor elementType="road" elementId="4" contactPoint="start" />
+        </link>
+        <type s="0" type="town">
+            <speed max="5.56" unit="m/s" />
+        </type>
+        <planView>
+            <geometry s="0" x="150" y="20" hdg="-1.5707963267949" length="31.4159265358979">
+                <arc curvature="0.05" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0">
+                <center>
+                    <lane id="0" type="none" level="false" />
+                </center>
+                <right>
+                    <lane id="-1" type="driving" level="false">
+                        <link>
+                            <predecessor id="-1" />
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0" a="3.5" b="0" c="0" d="0" />
+                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <speed sOffset="0" max="5.56" />
+                        <userData code="automap.canonicalLaneId" value="lane_detour" />
+                        <userData code="automap.exportRole" value="synthesized_merge_connector" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+        <userData code="automap.canonicalRoadId" value="road_detour" />
+        <userData code="automap.exportRole" value="synthesized_merge_connector" />
+    </road>
+    <junction name="Depot Route Split" id="10" type="default">
+        <connection id="0" incomingRoad="1" connectingRoad="101" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+            <laneLink from="-2" to="-2" />
+        </connection>
+        <connection id="1" incomingRoad="1" connectingRoad="102" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+        </connection>
+        <userData code="automap.canonicalJunctionId" value="junction_route_split" />
+    </junction>
+    <junction name="Depot Route Merge" id="20" type="default">
+        <connection id="0" incomingRoad="2" connectingRoad="201" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+            <laneLink from="-2" to="-2" />
+        </connection>
+        <connection id="1" incomingRoad="3" connectingRoad="202" contactPoint="start">
+            <laneLink from="-1" to="-1" />
+        </connection>
+        <userData code="automap.exportRole" value="synthesized_merge_junction" />
+    </junction>
+</OpenDRIVE>

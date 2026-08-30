@@ -1,0 +1,97 @@
+:root {
+  color: #18211b;
+  background: #eef1ec;
+  font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 1080px; min-height: 100vh; }
+button, input { font: inherit; }
+
+.topbar {
+  height: 86px;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #f4f7f2;
+  background: #15271d;
+  border-bottom: 4px solid #f0a83b;
+}
+.topbar h1 { margin: 1px 0 0; font-size: 25px; letter-spacing: .02em; }
+.eyebrow, .section-label { margin: 0; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.eyebrow { color: #96bda3; }
+.toolbar { display: flex; gap: 9px; }
+.button {
+  border: 1px solid #597064;
+  border-radius: 7px;
+  padding: 9px 13px;
+  color: #f4f7f2;
+  background: #23392d;
+  cursor: pointer;
+}
+.button:hover { background: #304b3b; }
+.button.primary { color: #172019; background: #f0a83b; border-color: #f0a83b; }
+
+.workspace { height: calc(100vh - 86px); display: grid; grid-template-columns: 230px minmax(620px, 1fr) 310px; }
+.panel { padding: 20px 18px; overflow: auto; background: #f8faf6; }
+.layers-panel { border-right: 1px solid #cad1c9; }
+.inspector-panel { border-left: 1px solid #cad1c9; }
+.panel section + section { margin-top: 27px; }
+.panel h2 { margin: 7px 0 3px; font-size: 17px; overflow-wrap: anywhere; }
+.muted { color: #6a756e; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.section-label { color: #748078; }
+.layer-list { display: grid; gap: 8px; margin-top: 10px; }
+.layer-toggle { display: flex; align-items: center; gap: 7px; font-size: 13px; cursor: pointer; }
+.layer-toggle input { accent-color: #287a52; }
+.legend { display: grid; gap: 9px; }
+.legend .section-label { margin-bottom: 2px; }
+.legend span { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.swatch { width: 22px; height: 4px; display: inline-block; border-radius: 4px; background: #444; }
+.swatch.lane { background: #1685a0; }
+.swatch.boundary { border-top: 2px dashed #f0a83b; background: none; }
+.swatch.road { background: #849089; }
+.swatch.area { height: 12px; background: #9ac4a6; }
+.swatch.restricted { height: 12px; background: repeating-linear-gradient(45deg, #c95b4b, #c95b4b 3px, #f7d2ca 3px, #f7d2ca 6px); }
+.swatch.station { width: 11px; height: 11px; border-radius: 50%; background: #7a3ea1; }
+
+.map-shell { min-width: 0; position: relative; overflow: hidden; background: #dde2dc; }
+.status {
+  position: absolute; z-index: 2; left: 16px; top: 14px;
+  padding: 7px 10px; border-radius: 5px;
+  color: #536058; background: rgba(248, 250, 246, .9);
+  box-shadow: 0 2px 10px rgba(20, 35, 25, .08); font-size: 12px;
+}
+#map-canvas { width: 100%; height: 100%; display: block; cursor: grab; background: #f2f4ef; touch-action: none; }
+#map-canvas.dragging { cursor: grabbing; }
+.layer.hidden { display: none; }
+.map-object { cursor: pointer; vector-effect: non-scaling-stroke; transition: filter .15s, stroke-width .15s; }
+.map-object:hover, .map-object.selected { filter: drop-shadow(0 0 4px rgba(14, 46, 28, .55)); }
+.map-object.selected { stroke: #df3b2f !important; stroke-width: 6px !important; }
+.road-reference { fill: none; stroke: #7c8981; stroke-width: 3; stroke-dasharray: 2 7; }
+.lane-centerline { fill: none; stroke: #1685a0; stroke-width: 4; }
+.lane-closed { stroke: #d45b4c; }
+.lane-boundary { fill: none; stroke: #df9a2e; stroke-width: 2.4; }
+.boundary-dashed_line { stroke-dasharray: 12 9; }
+.boundary-double_solid_line { stroke-width: 5; }
+.boundary-curb { stroke: #4e5851; stroke-width: 5; }
+.operational-area { stroke: #528162; stroke-width: 2; fill: rgba(106, 166, 126, .22); vector-effect: non-scaling-stroke; }
+.area-loading_area { fill: rgba(237, 166, 57, .23); stroke: #c98522; }
+.area-charging_area { fill: rgba(61, 151, 126, .23); stroke: #25866d; }
+.restricted-area { stroke: #bd4b3e; stroke-width: 2.4; stroke-dasharray: 7 5; fill: rgba(203, 79, 64, .18); vector-effect: non-scaling-stroke; }
+.station { fill: #7a3ea1; stroke: #fff; stroke-width: 2.5; }
+.station-charging_point { fill: #1d8b70; }
+.station-loading_bay { fill: #d27d1d; }
+.junction-node { fill: rgba(243, 171, 57, .7); stroke: #8c5a13; stroke-width: 3; }
+.topology-link { stroke: #455b4c; stroke-width: 2; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.arrowhead { fill: #455b4c; }
+.map-label { fill: #243129; paint-order: stroke; stroke: #f5f7f2; stroke-width: 4px; font-size: 12px; font-weight: 650; pointer-events: none; }
+
+#object-json {
+  margin-top: 18px; padding: 13px; min-height: 180px;
+  border: 1px solid #d7ddd5; border-radius: 7px;
+  color: #294335; background: #eef2eb;
+  font: 12px/1.55 Consolas, "Cascadia Mono", monospace;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}

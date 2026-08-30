@@ -6,7 +6,7 @@
 namespace {
 bool check(bool condition, std::string_view message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr << "失败：" << message << '\n';
         return false;
     }
     return true;
@@ -29,32 +29,32 @@ int main() {
     map.restricted_areas.push_back(RestrictedArea{.id = "restricted_1"});
     map.vehicle_profiles.push_back(VehicleProfile{.id = "vehicle_1"});
 
-    passed &= check(map.find_road("road_1") != nullptr, "Road lookup should work.");
-    passed &= check(map.find_lane("lane_1") != nullptr, "Lane lookup should work.");
+    passed &= check(map.find_road("road_1") != nullptr, "Road 查询应正常工作。");
+    passed &= check(map.find_lane("lane_1") != nullptr, "Lane 查询应正常工作。");
     passed &= check(map.find_lane_boundary("boundary_1") != nullptr,
-                    "Lane boundary lookup should work.");
+                    "LaneBoundary 查询应正常工作。");
     passed &= check(map.find_junction("junction_1") != nullptr,
-                    "Junction lookup should work.");
+                    "Junction 查询应正常工作。");
     passed &= check(map.find_lane_connection("connection_1") != nullptr,
-                    "Lane connection lookup should work.");
+                    "LaneConnection 查询应正常工作。");
     passed &= check(map.find_operational_area("area_1") != nullptr,
-                    "Operational area lookup should work.");
+                    "OperationalArea 查询应正常工作。");
     passed &= check(map.find_station("station_1") != nullptr,
-                    "Station lookup should work.");
+                    "Station 查询应正常工作。");
     passed &= check(map.find_restricted_area("restricted_1") != nullptr,
-                    "Restricted area lookup should work.");
+                    "RestrictedArea 查询应正常工作。");
     passed &= check(map.find_vehicle_profile("vehicle_1") != nullptr,
-                    "Vehicle profile lookup should work.");
+                    "VehicleProfile 查询应正常工作。");
 
     const MapData copied_map = map;
     passed &= check(copied_map == map,
-                    "MapData should support whole-map value comparison.");
+                    "MapData 应支持整张地图的值比较。");
     passed &= check(copied_map.find_operational_area("missing") == nullptr,
-                    "A missing aggregate lookup should return nullptr.");
+                    "聚合根中查找不存在的对象应返回 nullptr。");
 
     if (!passed) {
         return 1;
     }
-    std::cout << "AutoMapOps M2 MapData aggregate test passed.\n";
+    std::cout << "AutoMapOps M2 MapData 聚合根测试通过。\n";
     return 0;
 }

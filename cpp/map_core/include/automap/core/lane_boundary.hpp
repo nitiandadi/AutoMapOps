@@ -24,7 +24,7 @@ enum class LaneBoundaryType {
 
 struct LaneBoundary final {
     ObjectId id;
-    Polyline3d geometry;
+    PathGeometry3d geometry;
     LaneBoundaryType type{LaneBoundaryType::unknown};
     bool crossing_allowed{false};
 

@@ -9,7 +9,7 @@ namespace automap::core {
 
 namespace map_header_defaults {
 
-inline constexpr std::string_view schema_version{"1.0"};
+inline constexpr std::string_view schema_version{"1.1"};
 inline constexpr std::string_view geodetic_datum{"WGS84"};
 inline constexpr std::string_view linear_unit{"m"};
 inline constexpr std::string_view angle_unit{"rad"};

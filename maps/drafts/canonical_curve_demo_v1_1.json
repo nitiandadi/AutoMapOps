@@ -1,0 +1,561 @@
+{
+  "$schema": "../../schemas/canonical-map-1.1.schema.json",
+  "header": {
+    "mapId": "canonical_curve_demo",
+    "name": "Canonical 1.1 曲线物流园演示",
+    "schemaVersion": "1.1",
+    "coordinateReference": {
+      "geodeticDatum": "WGS84",
+      "origin": {
+        "longitudeDeg": 104.0668,
+        "latitudeDeg": 30.5728,
+        "altitudeM": 500.0
+      },
+      "localFrame": "enu",
+      "linearUnit": "m",
+      "angleUnit": "rad"
+    }
+  },
+  "roads": [
+    {
+      "id": "road_curve_demo",
+      "name": "曲线训练主路",
+      "referenceLine": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, 0.0, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, 0.0, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, 0.8296204854, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 5.5740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "predecessorIds": [],
+      "successorIds": [],
+      "laneIds": ["lane_curve_forward", "lane_curve_reverse"]
+    },
+    {
+      "id": "road_loading_spur",
+      "name": "仓库装卸支路",
+      "referenceLine": [
+        [22.0, 0.0, 0.5],
+        [22.0, 12.0, 0.6],
+        [40.0, 12.0, 0.7],
+        [40.0, 24.0, 0.7]
+      ],
+      "predecessorIds": ["road_curve_demo"],
+      "successorIds": [],
+      "laneIds": ["lane_loading_spur"]
+    },
+    {
+      "id": "road_parking_spur",
+      "name": "停车充电支路",
+      "referenceLine": [
+        [30.0, -1.8, 0.7],
+        [30.0, -18.0, 0.4],
+        [58.0, -18.0, 0.4]
+      ],
+      "predecessorIds": ["road_curve_demo"],
+      "successorIds": [],
+      "laneIds": ["lane_parking_spur"]
+    }
+  ],
+  "lanes": [
+    {
+      "id": "lane_curve_forward",
+      "roadId": "road_curve_demo",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, -1.8, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, -1.8, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, -0.9703795146, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 3.7740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_curve_center",
+      "rightBoundaryId": "boundary_curve_right",
+      "predecessorIds": [],
+      "successorIds": [],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.6,
+      "speedLimitMps": 8.33
+    },
+    {
+      "id": "lane_curve_reverse",
+      "roadId": "road_curve_demo",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, 1.8, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, 1.8, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, 2.6296204854, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 7.3740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "side": "left",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_curve_left",
+      "rightBoundaryId": "boundary_curve_center",
+      "predecessorIds": [],
+      "successorIds": [],
+      "direction": "against_reference_line",
+      "status": "open",
+      "widthM": 3.6,
+      "speedLimitMps": 8.33
+    },
+    {
+      "id": "lane_loading_spur",
+      "roadId": "road_loading_spur",
+      "centerline": [
+        [22.0, 0.0, 0.5],
+        [22.0, 12.0, 0.6],
+        [40.0, 12.0, 0.7],
+        [40.0, 24.0, 0.7]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_loading_left",
+      "rightBoundaryId": "boundary_loading_right",
+      "predecessorIds": [],
+      "successorIds": [],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.6,
+      "speedLimitMps": 5.0
+    },
+    {
+      "id": "lane_parking_spur",
+      "roadId": "road_parking_spur",
+      "centerline": [
+        [30.0, -1.8, 0.7],
+        [30.0, -18.0, 0.4],
+        [58.0, -18.0, 0.4]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_parking_left",
+      "rightBoundaryId": "boundary_parking_right",
+      "predecessorIds": [],
+      "successorIds": [],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.6,
+      "speedLimitMps": 4.0
+    }
+  ],
+  "laneBoundaries": [
+    {
+      "id": "boundary_curve_left",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, 3.6, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, 3.6, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, 4.4296204854, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 9.1740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_curve_center",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, 0.0, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, 0.0, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, 0.8296204854, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 5.5740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "type": "double_solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_curve_right",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [0.0, -3.6, 0.0],
+            "headingRad": 0.0,
+            "lengthM": 20.0,
+            "endZM": 0.5
+          },
+          {
+            "type": "clothoid",
+            "start": [20.0, -3.6, 0.5],
+            "headingRad": 0.0,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "startCurvaturePerM": 0.0,
+            "endCurvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [29.9376805843, -2.7703795146, 1.0],
+            "headingRad": 0.25,
+            "lengthM": 10.0,
+            "endZM": 1.5,
+            "curvaturePerM": 0.05
+          },
+          {
+            "type": "circular_arc",
+            "start": [38.6223765997, 1.9740915421, 1.5],
+            "headingRad": 0.75,
+            "lengthM": 10.0,
+            "endZM": 1.0,
+            "curvaturePerM": -0.05
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_loading_left",
+      "geometry": [
+        [20.2, 0.0, 0.5],
+        [20.2, 13.8, 0.6],
+        [38.2, 13.8, 0.7],
+        [38.2, 24.0, 0.7]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_loading_right",
+      "geometry": [
+        [23.8, 0.0, 0.5],
+        [23.8, 10.2, 0.6],
+        [41.8, 10.2, 0.7],
+        [41.8, 24.0, 0.7]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_parking_left",
+      "geometry": [
+        [28.2, -1.8, 0.7],
+        [28.2, -19.8, 0.4],
+        [58.0, -19.8, 0.4]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_parking_right",
+      "geometry": [
+        [31.8, -1.8, 0.7],
+        [31.8, -16.2, 0.4],
+        [58.0, -16.2, 0.4]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    }
+  ],
+  "junctions": [
+    {
+      "id": "junction_park_center",
+      "name": "园区中央分流点",
+      "connectionIds": []
+    },
+    {
+      "id": "junction_loading",
+      "name": "仓库支路口",
+      "connectionIds": []
+    },
+    {
+      "id": "junction_parking",
+      "name": "停车支路口",
+      "connectionIds": []
+    }
+  ],
+  "laneConnections": [],
+  "operationalAreas": [
+    {
+      "id": "area_warehouse_a",
+      "name": "A 栋仓库",
+      "type": "warehouse",
+      "outline": [
+        [3.0, 18.0, 0.0],
+        [18.0, 18.0, 0.0],
+        [18.0, 38.0, 0.0],
+        [3.0, 38.0, 0.0],
+        [3.0, 18.0, 0.0]
+      ]
+    },
+    {
+      "id": "area_warehouse_b",
+      "name": "B 栋仓库",
+      "type": "warehouse",
+      "outline": [
+        [23.0, 18.0, 0.0],
+        [37.0, 18.0, 0.0],
+        [37.0, 38.0, 0.0],
+        [23.0, 38.0, 0.0],
+        [23.0, 18.0, 0.0]
+      ]
+    },
+    {
+      "id": "area_loading_yard",
+      "name": "装卸作业场",
+      "type": "loading_area",
+      "outline": [
+        [42.0, 16.0, 0.0],
+        [61.0, 16.0, 0.0],
+        [61.0, 34.0, 0.0],
+        [42.0, 34.0, 0.0],
+        [42.0, 16.0, 0.0]
+      ]
+    },
+    {
+      "id": "area_staff_parking",
+      "name": "员工停车区",
+      "type": "parking_area",
+      "outline": [
+        [7.0, -35.0, 0.0],
+        [36.0, -35.0, 0.0],
+        [36.0, -22.0, 0.0],
+        [7.0, -22.0, 0.0],
+        [7.0, -35.0, 0.0]
+      ]
+    },
+    {
+      "id": "area_charging",
+      "name": "新能源充电区",
+      "type": "charging_area",
+      "outline": [
+        [41.0, -35.0, 0.0],
+        [65.0, -35.0, 0.0],
+        [65.0, -22.0, 0.0],
+        [41.0, -22.0, 0.0],
+        [41.0, -35.0, 0.0]
+      ]
+    }
+  ],
+  "stations": [
+    {
+      "id": "station_park_gate",
+      "name": "园区入口门岗",
+      "type": "gate",
+      "position": [2.0, -1.8, 0.1],
+      "accessLaneId": "lane_curve_forward"
+    },
+    {
+      "id": "station_warehouse_a",
+      "name": "A 仓装卸点",
+      "type": "loading_bay",
+      "position": [22.0, 20.0, 0.7],
+      "accessLaneId": "lane_loading_spur"
+    },
+    {
+      "id": "station_loading_yard",
+      "name": "装卸场调度点",
+      "type": "loading_bay",
+      "position": [40.0, 23.0, 0.7],
+      "accessLaneId": "lane_loading_spur"
+    },
+    {
+      "id": "station_staff_parking",
+      "name": "员工停车入口",
+      "type": "parking_space",
+      "position": [30.0, -18.0, 0.4],
+      "accessLaneId": "lane_parking_spur"
+    },
+    {
+      "id": "station_charging",
+      "name": "车辆充电点",
+      "type": "charging_point",
+      "position": [56.0, -18.0, 0.4],
+      "accessLaneId": "lane_parking_spur"
+    },
+    {
+      "id": "station_park_exit",
+      "name": "园区出口检查点",
+      "type": "waypoint",
+      "position": [47.3070726151, 8.5185625988, 1.0],
+      "accessLaneId": "lane_curve_forward"
+    }
+  ],
+  "restrictedAreas": [
+    {
+      "id": "restricted_heavy_vehicle",
+      "name": "大车弯道限行区",
+      "outline": [
+        [47.0, -1.0, 0.0],
+        [65.0, -1.0, 0.0],
+        [65.0, 13.0, 0.0],
+        [50.0, 13.0, 0.0],
+        [47.0, -1.0, 0.0]
+      ],
+      "allowedVehicleProfileIds": ["vehicle_park_car"]
+    }
+  ],
+  "vehicleProfiles": [
+    {
+      "id": "vehicle_park_car",
+      "name": "园区巡检车",
+      "type": "passenger_car",
+      "widthM": 1.9,
+      "heightM": 1.6,
+      "lengthM": 4.6,
+      "minimumTurningRadiusM": 5.5
+    },
+    {
+      "id": "vehicle_logistics_truck",
+      "name": "园区物流卡车",
+      "type": "truck",
+      "widthM": 2.5,
+      "heightM": 3.8,
+      "lengthM": 10.5,
+      "minimumTurningRadiusM": 9.0
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automapops.local/schemas/canonical-map-1.1.schema.json",
+  "title": "AutoMapOps Canonical Map 1.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "header", "roads", "lanes", "laneBoundaries", "junctions",
+    "laneConnections", "operationalAreas", "stations", "restrictedAreas",
+    "vehicleProfiles"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "header": { "$ref": "#/$defs/header" },
+    "roads": { "type": "array", "items": { "$ref": "#/$defs/road" } },
+    "lanes": { "type": "array", "items": { "$ref": "#/$defs/lane" } },
+    "laneBoundaries": { "type": "array", "items": { "$ref": "#/$defs/laneBoundary" } },
+    "junctions": { "type": "array", "items": { "$ref": "#/$defs/junction" } },
+    "laneConnections": { "type": "array", "items": { "$ref": "#/$defs/laneConnection" } },
+    "operationalAreas": { "type": "array", "items": { "$ref": "#/$defs/operationalArea" } },
+    "stations": { "type": "array", "items": { "$ref": "#/$defs/station" } },
+    "restrictedAreas": { "type": "array", "items": { "$ref": "#/$defs/restrictedArea" } },
+    "vehicleProfiles": { "type": "array", "items": { "$ref": "#/$defs/vehicleProfile" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "idList": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+    "point3d": {
+      "type": "array",
+      "tsType": "[number, number, number]",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "polyline3d": { "type": "array", "items": { "$ref": "#/$defs/point3d" } },
+    "lineSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "start", "headingRad", "lengthM", "endZM"],
+      "properties": {
+        "type": { "const": "line" }, "start": { "$ref": "#/$defs/point3d" },
+        "headingRad": { "type": "number" }, "lengthM": { "type": "number", "exclusiveMinimum": 0 },
+        "endZM": { "type": "number" }
+      }
+    },
+    "circularArcSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "start", "headingRad", "lengthM", "endZM", "curvaturePerM"],
+      "properties": {
+        "type": { "const": "circular_arc" }, "start": { "$ref": "#/$defs/point3d" },
+        "headingRad": { "type": "number" }, "lengthM": { "type": "number", "exclusiveMinimum": 0 },
+        "endZM": { "type": "number" }, "curvaturePerM": { "type": "number", "not": { "const": 0 } }
+      }
+    },
+    "clothoidSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "start", "headingRad", "lengthM", "endZM", "startCurvaturePerM", "endCurvaturePerM"],
+      "properties": {
+        "type": { "const": "clothoid" }, "start": { "$ref": "#/$defs/point3d" },
+        "headingRad": { "type": "number" }, "lengthM": { "type": "number", "exclusiveMinimum": 0 },
+        "endZM": { "type": "number" }, "startCurvaturePerM": { "type": "number" },
+        "endCurvaturePerM": { "type": "number" }
+      }
+    },
+    "curveSegment": {
+      "oneOf": [{ "$ref": "#/$defs/lineSegment" }, { "$ref": "#/$defs/circularArcSegment" }, { "$ref": "#/$defs/clothoidSegment" }]
+    },
+    "compositeCurve3d": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "segments"],
+      "properties": {
+        "type": { "const": "composite_curve" },
+        "segments": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/curveSegment" } }
+      }
+    },
+    "pathGeometry3d": { "oneOf": [{ "$ref": "#/$defs/polyline3d" }, { "$ref": "#/$defs/compositeCurve3d" }] },
+    "header": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mapId", "name", "schemaVersion", "coordinateReference"],
+      "properties": {
+        "mapId": { "$ref": "#/$defs/id" }, "name": { "type": "string" },
+        "schemaVersion": { "enum": ["1.0", "1.1"] },
+        "coordinateReference": {
+          "type": "object", "additionalProperties": false,
+          "required": ["geodeticDatum", "origin", "localFrame", "linearUnit", "angleUnit"],
+          "properties": {
+            "geodeticDatum": { "const": "WGS84" },
+            "origin": {
+              "type": "object", "additionalProperties": false,
+              "required": ["longitudeDeg", "latitudeDeg", "altitudeM"],
+              "properties": {
+                "longitudeDeg": { "type": "number" }, "latitudeDeg": { "type": "number" }, "altitudeM": { "type": "number" }
+              }
+            },
+            "localFrame": { "const": "enu" }, "linearUnit": { "const": "m" }, "angleUnit": { "const": "rad" }
+          }
+        }
+      }
+    },
+    "road": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "referenceLine", "predecessorIds", "successorIds", "laneIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" },
+        "referenceLine": { "$ref": "#/$defs/pathGeometry3d" },
+        "predecessorIds": { "$ref": "#/$defs/idList" }, "successorIds": { "$ref": "#/$defs/idList" }, "laneIds": { "$ref": "#/$defs/idList" }
+      }
+    },
+    "lane": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "roadId", "centerline", "side", "orderFromReference", "leftBoundaryId", "rightBoundaryId", "predecessorIds", "successorIds", "direction", "status", "widthM", "speedLimitMps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "roadId": { "$ref": "#/$defs/id" }, "centerline": { "$ref": "#/$defs/pathGeometry3d" },
+        "side": { "enum": ["left", "right"] }, "orderFromReference": { "type": "integer", "minimum": 0 },
+        "leftBoundaryId": { "$ref": "#/$defs/id" }, "rightBoundaryId": { "$ref": "#/$defs/id" },
+        "predecessorIds": { "$ref": "#/$defs/idList" }, "successorIds": { "$ref": "#/$defs/idList" },
+        "direction": { "enum": ["along_reference_line", "against_reference_line"] }, "status": { "enum": ["open", "closed"] },
+        "widthM": { "type": "number" }, "speedLimitMps": { "type": "number" }
+      }
+    },
+    "laneBoundary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "geometry", "type", "crossingAllowed"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "geometry": { "$ref": "#/$defs/pathGeometry3d" },
+        "type": { "enum": ["unknown", "dashed_line", "solid_line", "double_solid_line", "curb", "virtual_boundary"] },
+        "crossingAllowed": { "type": "boolean" }
+      }
+    },
+    "junction": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "connectionIds"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" }, "connectionIds": { "$ref": "#/$defs/idList" } }
+    },
+    "laneConnection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "junctionId", "incomingLaneId", "connectingLaneId", "outgoingLaneId", "turnDirection"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "junctionId": { "$ref": "#/$defs/id" },
+        "incomingLaneId": { "$ref": "#/$defs/id" }, "connectingLaneId": { "$ref": "#/$defs/id" },
+        "outgoingLaneId": { "$ref": "#/$defs/id" }, "turnDirection": { "enum": ["straight", "left", "right", "u_turn"] }
+      }
+    },
+    "operationalArea": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "type", "outline"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" },
+        "type": { "enum": ["unknown", "warehouse", "loading_area", "parking_area", "charging_area"] },
+        "outline": { "$ref": "#/$defs/polyline3d" }
+      }
+    },
+    "station": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "type", "position", "accessLaneId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" },
+        "type": { "enum": ["unknown", "gate", "loading_bay", "parking_space", "charging_point", "waypoint"] },
+        "position": { "$ref": "#/$defs/point3d" }, "accessLaneId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "restrictedArea": {
+      "type": "object", "additionalProperties": false, "required": ["id", "name", "outline", "allowedVehicleProfileIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" }, "outline": { "$ref": "#/$defs/polyline3d" },
+        "allowedVehicleProfileIds": { "$ref": "#/$defs/idList" }
+      }
+    },
+    "vehicleProfile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "type", "widthM", "heightM", "lengthM", "minimumTurningRadiusM"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "name": { "type": "string" }, "type": { "enum": ["passenger_car", "delivery_van", "truck"] },
+        "widthM": { "type": "number" }, "heightM": { "type": ["number", "null"] },
+        "lengthM": { "type": ["number", "null"] }, "minimumTurningRadiusM": { "type": ["number", "null"] }
+      }
+    }
+  }
+}

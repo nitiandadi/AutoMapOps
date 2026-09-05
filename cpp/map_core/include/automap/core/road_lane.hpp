@@ -34,7 +34,7 @@ enum class LaneStatus {
 struct Road final {
     ObjectId id;
     std::string name;
-    Polyline3d reference_line;
+    PathGeometry3d reference_line;
     std::vector<ObjectId> predecessor_ids;
     std::vector<ObjectId> successor_ids;
     std::vector<ObjectId> lane_ids;
@@ -45,7 +45,7 @@ struct Road final {
 struct Lane final {
     ObjectId id;
     ObjectId road_id;
-    Polyline3d centerline;
+    PathGeometry3d centerline;
 
     LaneSide side{LaneSide::right};
     std::uint32_t order_from_reference{1};

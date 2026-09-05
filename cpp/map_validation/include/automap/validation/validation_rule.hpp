@@ -1,15 +1,14 @@
 #pragma once
 
-#include "automap/core/map_id.hpp"
+#include "automap/core/map_data.hpp"
 #include "automap/validation/validation_report.hpp"
 
 #include <string_view>
 
 namespace automap::validation {
 
-// Minimal rule context for the M1 scaffold. MapData will be added in M2.
 struct ValidationContext {
-    const core::MapId& map_id;
+    const core::MapData& map;
 };
 
 class ValidationRule {

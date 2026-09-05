@@ -2,6 +2,8 @@ add_library(automap_map_io STATIC
     include/automap/io/canonical_json.hpp
     include/automap/io/map_io.hpp
     src/canonical_json.cpp
+    src/json_value.cpp
+    src/json_value.hpp
 )
 
 add_library(AutoMapOps::map_io ALIAS automap_map_io)

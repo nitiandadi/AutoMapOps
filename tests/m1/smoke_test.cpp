@@ -33,8 +33,8 @@ int main() {
 
     passed &= check(!map_id.empty(), "MapId 应保存非空值。");
     passed &= check(
-        automap::io::canonical_json_schema_version() == "1.0",
-        "Canonical JSON Schema 版本应为 1.0。");
+        automap::io::canonical_json_schema_version() == "1.1",
+        "Canonical JSON 最新 Schema 版本应为 1.1。");
 
     ValidationReport clean_report{map_id};
     const VersionPublisher publisher;

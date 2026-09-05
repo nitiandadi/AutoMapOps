@@ -53,8 +53,11 @@ int main() {
                     "MapHeader 应保存稳定的地图 ID。");
     passed &= check(header.name == "Logistics Park Demo",
                     "MapHeader 应保存地图显示名称。");
-    passed &= check(header.schema_version == map_header_defaults::schema_version,
-                    "MapHeader 应提供 Canonical Schema 版本 1.0。");
+    passed &= check(header.schema_version == "1.0",
+                    "显式指定时 MapHeader 应保留 Canonical Schema 版本 1.0。");
+    passed &= check(MapHeader{}.schema_version == map_header_defaults::schema_version &&
+                        map_header_defaults::schema_version == "1.1",
+                    "新建 MapHeader 应默认使用最新 Canonical Schema 版本 1.1。");
     passed &= check(header.coordinate_reference.origin ==
                         GeodeticPoint{104.0668, 30.5728, 500.0},
                     "MapHeader 应保存 WGS84 ENU 原点。");

@@ -1,6 +1,6 @@
 # Canonical 曲线与 WebGL 可视化升级计划
 
-> 状态：已进入实施，进度与验证记录见 `VISUALIZER_EXECUTION_PLAN.md`  
+> 状态：已进入实施，进度与验证记录见 `VISUALIZER_EXECUTION_PLAN.md`
 > 目标：解决文本避让、对象选择、代码可维护性、大数据量和真实曲线渲染问题。
 
 ## 1. 总体方案

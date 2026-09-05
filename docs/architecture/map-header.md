@@ -10,7 +10,7 @@
 |---|---|---|---|
 | `map_id` | `mapId` | `MapId` | 地图项目的稳定 ID，跨版本保持不变 |
 | `name` | `name` | string | 面向用户的地图名称 |
-| `schema_version` | `schemaVersion` | string | Canonical Map Model 结构版本，首版为 `1.0` |
+| `schema_version` | `schemaVersion` | string | Canonical Map Model 结构版本；首版为 `1.0`，当前默认版本为 `1.1` |
 | `coordinate_reference` | `coordinateReference` | object | 地理基准、ENU 原点和单位 |
 
 `CoordinateReference` 首版固定约定：

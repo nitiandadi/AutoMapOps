@@ -49,6 +49,21 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
+测试源码按照任务清单中的里程碑分组：
+
+```text
+tests/
+├─ m1/   # 最小工程与模块联通
+├─ m2/   # Canonical 核心模型
+└─ m3/   # JSON IO、CLI 和质检规则
+```
+
+CTest 名称采用相同的阶段前缀，可以只运行某个里程碑：
+
+```powershell
+ctest --test-dir build -R "automap.m3" --output-on-failure
+```
+
 预期至少看到：
 
 ```text
@@ -69,7 +84,19 @@ automap.m1.smoke ... Passed
 ```text
 AutoMapOps 0.1.0
 Canonical format: AutoMapOps Canonical JSON
+用法：
+  automap_cli inspect <canonical-json-path>
 ```
+
+## 查看地图摘要
+
+`inspect` 命令读取 Canonical JSON，并输出地图 ID、名称、Schema 版本、WGS84/ENU 坐标参考、局部 ENU 几何范围和九类对象统计：
+
+```powershell
+.\build\cpp\apps\automap_cli\automap_cli.exe inspect .\maps\drafts\logistics_park_v0.json
+```
+
+Visual Studio 多配置生成器通常需要在可执行文件路径中增加 `Debug` 或 `Release` 目录。读取失败返回退出码 1；命令或参数错误返回退出码 2。
 
 如果Visual Studio使用多配置生成器，可执行文件通常位于`out/build/<配置>/cpp/apps/automap_cli/`或带`Debug`、`Release`子目录的位置，以Visual Studio输出窗口显示的构建路径为准。
 

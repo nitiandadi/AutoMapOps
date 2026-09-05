@@ -1,8 +1,15 @@
 # CMake build output
 /build/
 /build-msvc/
+/build-cv/
 /out/
 /cmake-build-*/
+
+# Frontend build and test output
+/visualizer/node_modules/
+/visualizer/dist/
+/visualizer/test-results/
+/visualizer/playwright-report/
 
 # Visual Studio
 /.vs/
@@ -25,4 +32,3 @@
 *.swp
 Thumbs.db
 .DS_Store
-

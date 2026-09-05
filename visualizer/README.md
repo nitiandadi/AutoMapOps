@@ -1,15 +1,17 @@
 # AutoMapOps Visualizer
 
-独立的 Canonical Map Model 可视化调试项目。它只读取地图 JSON，不依赖或修改 C++ `map_core`，用于观察几何、拓扑、业务对象和原始字段。
+基于 Vue 3、TypeScript 和 deck.gl 的 Canonical Map 二维 WebGL 调试器。它直接读取本地 ENU 坐标，不依赖在线底图或 Mapbox Token。
 
 ## 当前能力
 
-- 显示 Road 参考线、Lane 中心线和 LaneBoundary；
-- 显示 OperationalArea、RestrictedArea、Station 和路口连接；
-- 显示 Lane 后继拓扑箭头；
-- 分图层开关、滚轮缩放、拖动画布；
-- 点击对象查看完整 Canonical 字段；
-- 从本地打开 JSON，内置一份物流园示意数据。
+- 读取 Canonical JSON 1.0 点列和 1.1 真实曲线；
+- 直接显示 `line`、`circular_arc`、`clothoid` 组合曲线；
+- 显示 Road、Lane、LaneBoundary、区域、Station、Junction 和 Lane 拓扑；
+- Worker 中解析、Schema 校验、构建三档 LOD 和二进制路径缓冲；
+- GPU 文本碰撞过滤和按对象类型划分的标签优先级；
+- 6 px 容差拾取、重叠候选选择、对象搜索和属性检查；
+- 图层开关、平移、缩放、对象定位和视图重置；
+- 以地图中心平移渲染坐标，属性检查器保留原始 ENU 数值。
 
 ## 运行
 
@@ -19,28 +21,70 @@ npm install
 npm run dev
 ```
 
-终端会给出本地访问地址。生产构建使用：
+静态检查与构建：
 
 ```powershell
+npm run generate:types
+npm run typecheck
 npm run build
 ```
 
-## JSON 约定
+测试和性能基准：
 
-当前 TypeScript 接口镜像 M2 的 `MapData`，JSON 字段使用 camelCase。几何点同时接受数组和对象：
-
-```json
-[10.0, 20.0, 0.0]
+```powershell
+npm run test
+npm run test:e2e
+npm run benchmark
 ```
 
-或：
+## 数据协议
+
+正式协议位于 `../schemas/canonical-map-1.1.schema.json`。三个路径字段接受点列或曲线对象：
+
+- `Road.referenceLine`
+- `Lane.centerline`
+- `LaneBoundary.geometry`
 
 ```json
-{"x": 10.0, "y": 20.0, "z": 0.0}
+{
+  "type": "composite_curve",
+  "segments": [
+    {
+      "type": "circular_arc",
+      "start": [20.0, 0.0, 0.5],
+      "headingRad": 0.0,
+      "lengthM": 10.0,
+      "endZM": 1.0,
+      "curvaturePerM": 0.05
+    }
+  ]
+}
 ```
 
-这是调试器的预接入契约。M3 Canonical JSON Schema 冻结后，应以正式 Schema 为准同步这里的类型与兼容层。
+内置示例为 `maps/opendrive/logistics_park_v0.xodr` 的 Canonical 1.1 转换结果：
+
+- 输出：`maps/drafts/logistics_park_from_opendrive_v1_1.json`
+- 转换器：`examples/opendrive/opendrive_to_canonical_1_1.py`
+- 道路参考线、车道、边界和连接拓扑来自 OpenDRIVE；
+- 仓库、装卸区、停车区、充电区、站点和限制区使用该 XODR 的原始 Canonical V0 来源补回精确业务多边形。
+
+重新生成示例：
+
+```powershell
+python ..\examples\opendrive\opendrive_to_canonical_1_1.py `
+  ..\maps\opendrive\logistics_park_v0.xodr `
+  ..\maps\drafts\logistics_park_v0.json `
+  ..\maps\drafts\logistics_park_from_opendrive_v1_1.json
+```
+
+仓库中的 `maps/drafts/logistics_park_v0.json` 仍保持 Schema 1.0，也可直接打开。
+
+## 渲染说明
+
+`CanonicalCurveLayer` 的输入仍是原始 `PathGeometry3d`。Worker 会为 GPU 生成 coarse、medium、fine 三档自适应细分缓存；该缓存不替代或修改 Canonical 曲线数据。PathLayer 使用 typed array 二进制属性，避免为每个渲染顶点创建 JavaScript 对象。
+
+Canonical 中的原始 Z 高程完整保留在地图模型、对象检查器和精确计算中。当前二维 WebGL 画布使用压平到 Z=0 的渲染副本，避免正高程被正交相机近裁剪面截断。
 
 ## 定位与限制
 
-本工具只做二维俯视调试，Z 坐标暂不参与绘制；它不是 GIS 编辑器，也不是 OpenDRIVE 查看器。对象引用、几何连续性和业务合法性仍由后续 `map_validation` 检查。
+本工具是二维只读教学和调试器。当前页面读取的是转换后的 Canonical JSON；OpenDRIVE 到 Canonical 的导入通过仓库脚本离线完成。当前不提供在线底图、三维显示和地图编辑功能，也不应作为量产车辆地图组件直接使用。

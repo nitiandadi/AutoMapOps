@@ -1,116 +1,58 @@
-export type PointLike = [number, number, number?] | { x: number; y: number; z?: number };
+import type {
+  AutoMapOpsCanonicalMap11,
+  CircularArcSegment,
+  ClothoidSegment,
+  CompositeCurve3D,
+  CurveSegment,
+  Junction,
+  Lane,
+  LaneBoundary,
+  LaneConnection,
+  LineSegment,
+  OperationalArea,
+  PathGeometry3D,
+  Point3D,
+  RestrictedArea,
+  Road,
+  Station,
+  VehicleProfile,
+} from "./generated/canonical-map.generated";
 
-export interface MapHeader {
-  mapId?: string | { value?: string };
-  name?: string;
-  schemaVersion?: string;
-}
+export type MapData = AutoMapOpsCanonicalMap11;
+export type Point3d = Point3D;
+export type Polyline3d = Point3D[];
+export type PathGeometry3d = PathGeometry3D;
+export type CompositeCurve3d = CompositeCurve3D;
+export type CurveSegment3d = CurveSegment;
+export type LineCurveSegment3d = LineSegment;
+export type CircularArcCurveSegment3d = CircularArcSegment;
+export type ClothoidCurveSegment3d = ClothoidSegment;
 
-export interface Road {
+export type MapObject = Road | Lane | LaneBoundary | Junction | LaneConnection
+  | OperationalArea | Station | RestrictedArea | VehicleProfile;
+
+export type FeatureKind = "Road" | "Lane" | "LaneBoundary" | "Junction"
+  | "LaneConnection" | "OperationalArea" | "Station" | "RestrictedArea"
+  | "VehicleProfile" | "LaneTopology";
+
+export type LayerName = "areas" | "restricted" | "roads" | "boundaries"
+  | "lanes" | "topology" | "junctions" | "stations" | "labels";
+
+export interface SelectedObject {
+  key: string;
+  kind: FeatureKind;
   id: string;
-  name?: string;
-  referenceLine?: PointLike[];
-  predecessorIds?: string[];
-  successorIds?: string[];
-  laneIds?: string[];
-}
-
-export interface Lane {
-  id: string;
-  roadId?: string;
-  centerline?: PointLike[];
-  leftBoundaryId?: string;
-  rightBoundaryId?: string;
-  predecessorIds?: string[];
-  successorIds?: string[];
-  direction?: string;
-  status?: string;
-  widthM?: number;
-  speedLimitMps?: number;
-}
-
-export interface LaneBoundary {
-  id: string;
-  geometry?: PointLike[];
-  type?: string;
-  crossingAllowed?: boolean;
-}
-
-export interface Junction {
-  id: string;
-  name?: string;
-  connectionIds?: string[];
-}
-
-export interface LaneConnection {
-  id: string;
-  junctionId?: string;
-  incomingLaneId?: string;
-  connectingLaneId?: string;
-  outgoingLaneId?: string;
-  turnDirection?: string;
-}
-
-export interface OperationalArea {
-  id: string;
-  name?: string;
-  type?: string;
-  outline?: PointLike[];
-}
-
-export interface Station {
-  id: string;
-  name?: string;
-  type?: string;
-  position?: PointLike;
-  accessLaneId?: string;
-}
-
-export interface RestrictedArea {
-  id: string;
-  name?: string;
-  outline?: PointLike[];
-  allowedVehicleProfileIds?: string[];
-}
-
-export interface VehicleProfile {
-  id: string;
-  name?: string;
-  type?: string;
-  widthM?: number;
-  heightM?: number;
-  lengthM?: number;
-  minimumTurningRadiusM?: number;
-}
-
-export interface MapData {
-  header?: MapHeader;
-  roads?: Road[];
-  lanes?: Lane[];
-  laneBoundaries?: LaneBoundary[];
-  junctions?: Junction[];
-  laneConnections?: LaneConnection[];
-  operationalAreas?: OperationalArea[];
-  stations?: Station[];
-  restrictedAreas?: RestrictedArea[];
-  vehicleProfiles?: VehicleProfile[];
-}
-
-export interface Point2d {
-  x: number;
-  y: number;
-}
-
-export function point2d(point: PointLike): Point2d {
-  return Array.isArray(point) ? { x: point[0], y: point[1] } : { x: point.x, y: point.y };
+  value: MapObject | Record<string, unknown>;
 }
 
 export function mapName(map: MapData): string {
-  return map.header?.name || "未命名地图";
+  return map.header.name || "未命名地图";
 }
 
 export function mapId(map: MapData): string {
-  const value = map.header?.mapId;
-  if (typeof value === "string") return value;
-  return value?.value || "unknown_map";
+  return map.header.mapId || "unknown_map";
+}
+
+export function isCompositeCurve(geometry: PathGeometry3d): geometry is CompositeCurve3d {
+  return !Array.isArray(geometry) && geometry.type === "composite_curve";
 }

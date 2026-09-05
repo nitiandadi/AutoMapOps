@@ -7,7 +7,8 @@ import type { FeatureKind, MapData, MapObject, PathGeometry3d, Point3d } from ".
 import { isCompositeCurve } from "../model";
 import { boundsOfPoints, evaluatePath, pathMidpoint, simplifyPolyline, tessellatePath } from "../render/geometry";
 import type { Bounds2d } from "../render/geometry";
-import type { Color, LodLevel, PackedPathData, PackedPathGroup, PreparedMap, RenderFeature, WorkerRequest, WorkerResponse } from "../render/types";
+import { packPaths } from "../render/pack-paths";
+import type { Color, LodLevel, PackedPathGroup, PreparedMap, RenderFeature, WorkerRequest, WorkerResponse } from "../render/types";
 
 const ajv = new Ajv2020({ allErrors: true, strict: false });
 const validate = ajv.compile(canonicalSchema);
@@ -92,29 +93,6 @@ function validateMap(value: unknown): MapData {
   return map;
 }
 
-function packPaths(features: RenderFeature[], lod: LodLevel): PackedPathData {
-  const vertexCount = features.reduce((total, feature) => total + (feature.lodPaths?.[lod].length ?? 0), 0);
-  const startIndices = new Uint32Array(features.length + 1);
-  const positions = new Float32Array(vertexCount * 3);
-  const colors = new Uint8Array(features.length * 4);
-  const widths = new Float32Array(features.length);
-  const dashArrays = new Float32Array(features.length * 2);
-  let vertexOffset = 0;
-  features.forEach((feature, featureIndex) => {
-    startIndices[featureIndex] = vertexOffset;
-    for (const point of feature.lodPaths?.[lod] ?? []) {
-      const offset = vertexOffset * 3;
-      positions[offset] = point[0]; positions[offset + 1] = point[1]; positions[offset + 2] = point[2];
-      vertexOffset += 1;
-    }
-    colors.set(feature.color, featureIndex * 4);
-    widths[featureIndex] = feature.width;
-    dashArrays.set(feature.dash ?? [0, 0], featureIndex * 2);
-  });
-  startIndices[features.length] = vertexOffset;
-  return { length: features.length, startIndices, positions, colors, widths, dashArrays };
-}
-
 function buildPathGroups(features: RenderFeature[]): Partial<Record<RenderFeature["layer"], PackedPathGroup>> {
   const groups: Partial<Record<RenderFeature["layer"], PackedPathGroup>> = {};
   const pathLayers = [...new Set(features.filter((feature) => feature.geometry).map((feature) => feature.layer))];
@@ -168,7 +146,12 @@ function buildPreparedMap(map: MapData): PreparedMap {
     feature.labelPriority = 40;
   });
   map.laneBoundaries.forEach((boundary, index) => {
-    addPath("LaneBoundary", index, boundary, boundary.geometry, "boundaries", boundary.id, boundary.type === "curb" ? 4 : 2, boundary.type === "dashed_line" ? [8, 6] : undefined);
+    const dash = boundary.type === "dashed_line"
+      ? [8, 6] as [number, number]
+      : boundary.type === "virtual_boundary"
+        ? [2, 4] as [number, number]
+        : undefined;
+    addPath("LaneBoundary", index, boundary, boundary.geometry, "boundaries", boundary.id, boundary.type === "curb" ? 4 : 2, dash);
   });
   map.operationalAreas.forEach((area, index) => {
     const feature = addObject("OperationalArea", index, area, "areas", pathMidpoint(area.outline));

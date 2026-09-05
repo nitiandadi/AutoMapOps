@@ -58,6 +58,7 @@ export class CanonicalCurveLayer extends CompositeLayer<CanonicalCurveLayerProps
       jointRounded: true,
       getDashArray: [0, 0],
       dashJustified: true,
+      _pathType: "open",
       extensions: [new PathStyleExtension({ dash: true })],
       pickable: false,
     }));
@@ -71,6 +72,7 @@ export class CanonicalCurveLayer extends CompositeLayer<CanonicalCurveLayerProps
       getWidth: 10,
       widthUnits: "pixels",
       widthMinPixels: 10,
+      _pathType: "open",
       opacity: 0.01,
       pickable: true,
     }));

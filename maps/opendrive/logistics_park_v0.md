@@ -75,3 +75,18 @@ Road 3 ─► Junction 20 ─► Road 202 ─┘
 - 没有把所有 Canonical Boundary 独立对象无损映射到 OpenDRIVE；
 - OpenDRIVE 对象使用道路局部 `s/t` 包围盒，业务区域的精确原始 Polygon 仍以 Canonical JSON 为准；
 - 输出是教学草稿，不能直接用于量产车辆或安全关键决策。
+
+## 转回 Canonical 1.1 并可视化
+
+可使用反向转换器把本文件的道路几何、车道宽度和 Junction 拓扑还原为支持曲线的 Canonical 1.1：
+
+```powershell
+python examples/opendrive/opendrive_to_canonical_1_1.py `
+  maps/opendrive/logistics_park_v0.xodr `
+  maps/drafts/logistics_park_v0.json `
+  maps/drafts/logistics_park_from_opendrive_v1_1.json
+```
+
+输出包含 9 条道路、15 条车道、24 条边界、2 个 Junction 和 6 条 LaneConnection。OpenDRIVE `planView` 中的 `line`、`arc`、`spiral` 会保留为 Canonical 1.1 曲线段，不会在数据层离散成折线。
+
+因为 XODR 业务对象只保存了道路局部 `s/t` 包围盒，转换器使用该文件可追溯的源数据 `maps/drafts/logistics_park_v0.json` 补回精确的园区多边形、站点和车辆限制语义；这部分不是从简化后的 XODR 对象轮廓反推得到的。

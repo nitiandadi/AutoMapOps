@@ -1,6 +1,6 @@
 import { computed, markRaw, ref } from "vue";
 import { defineStore } from "pinia";
-import type { LayerName, SelectedObject } from "../model";
+import type { LayerName, Point3d } from "../model";
 import type { PreparedMap, RenderFeature } from "../render/types";
 
 const defaultLayerVisibility: Record<LayerName, boolean> = {
@@ -14,13 +14,17 @@ export const useMapStore = defineStore("map", () => {
   const loading = ref(false);
   const error = ref("");
   const selectedKey = ref("");
+  const queryMode = ref<"table" | "json">(readMode());
+  const selectionAnchor = ref<Point3d>();
+  const focusRevision = ref(0);
+  let candidateAnchor: Point3d | undefined;
   const candidateKeys = ref<string[]>([]);
   const searchQuery = ref("");
   const searchPage = ref(0);
   const resetViewRevision = ref(0);
   const layerVisibility = ref<Record<LayerName, boolean>>({ ...defaultLayerVisibility });
 
-  const selected = computed<SelectedObject | undefined>(() =>
+  const selected = computed<RenderFeature | undefined>(() =>
     prepared.value?.features.find((feature) => feature.key === selectedKey.value));
   const candidates = computed<RenderFeature[]>(() => {
     const keys = new Set(candidateKeys.value);
@@ -39,6 +43,7 @@ export const useMapStore = defineStore("map", () => {
     loading.value = false;
     error.value = "";
     selectedKey.value = "";
+    selectionAnchor.value = undefined;
     candidateKeys.value = [];
     searchPage.value = 0;
     resetViewRevision.value += 1;
@@ -57,12 +62,33 @@ export const useMapStore = defineStore("map", () => {
 
   function select(key: string): void {
     selectedKey.value = key;
+    selectionAnchor.value = undefined;
+    focusRevision.value += 1;
     candidateKeys.value = [];
   }
 
-  function showCandidates(keys: string[]): void {
+  function selectCandidate(key: string): void {
+    selectedKey.value = key;
+    selectionAnchor.value = candidateAnchor;
+    candidateKeys.value = [];
+  }
+
+  function clearSelection(): void {
+    selectedKey.value = "";
+    selectionAnchor.value = undefined;
+    candidateKeys.value = [];
+  }
+
+  function setQueryMode(mode: "table" | "json"): void {
+    queryMode.value = mode;
+    try { localStorage.setItem("automap-query-mode", mode); } catch { /* 私密模式仍可切换 */ }
+  }
+
+  function showCandidates(keys: string[], anchor?: Point3d): void {
+    candidateAnchor = anchor;
     const unique = [...new Set(keys)];
-    if (unique.length === 1) select(unique[0]);
+    if (unique.length === 0) clearSelection();
+    else if (unique.length === 1) selectCandidate(unique[0]);
     else candidateKeys.value = unique;
   }
 
@@ -76,7 +102,13 @@ export const useMapStore = defineStore("map", () => {
 
   return {
     prepared, source, loading, error, selectedKey, selected, candidateKeys, candidates,
+    queryMode, selectionAnchor, focusRevision, setQueryMode, clearSelection, selectCandidate,
     searchQuery, searchPage, searchResults, resetViewRevision, layerVisibility,
     setPrepared, setLoading, setError, select, showCandidates, toggleLayer, resetView,
   };
 });
+
+function readMode(): "table" | "json" {
+  try { return localStorage.getItem("automap-query-mode") === "json" ? "json" : "table"; }
+  catch { return "table"; }
+}

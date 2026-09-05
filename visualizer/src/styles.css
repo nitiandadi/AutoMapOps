@@ -25,7 +25,24 @@ button:focus-visible, input:focus-visible { outline: 2px solid #d98814; outline-
 .button:hover { background: #304b3b; }
 .button.primary { color: #172019; background: #f0a83b; border-color: #f0a83b; }
 
-.workspace { height: calc(100vh - 86px); display: grid; grid-template-columns: 270px minmax(560px, 1fr) 330px; }
+.workspace { height: calc(100vh - 86px); display: grid; grid-template-columns: 270px minmax(560px, 1fr); }
+.workspace.with-inspector { grid-template-columns: 270px minmax(480px, 1fr) 330px; }
+.query-modes { display: flex; border: 1px solid #597064; border-radius: 7px; overflow: hidden; }
+.query-modes button { padding: 8px 12px; border: 0; background: #23392d; color: #fff; cursor: pointer; }
+.query-modes button[aria-pressed="true"] { background: #f0a83b; color: #172019; }
+.property-popup { position: absolute; z-index: 3; width: 360px; max-width: calc(100% - 24px); max-height: min(480px, calc(100% - 80px)); display: flex; flex-direction: column; background: #fff; border: 1px solid #ccd6cc; border-radius: 10px; box-shadow: 0 8px 30px #15271d33; overflow: hidden; }
+.popup-heading { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 16px; background: #f3f7f0; border-bottom: 1px solid #e0e6dc; }
+.popup-heading small { color: #627468; }
+.popup-heading h2 { margin: 4px 0 0; font-size: 16px; overflow-wrap: anywhere; }
+.popup-body { overflow: auto; padding: 8px 14px; min-height: 0; }
+.popup-body h3 { font-size: 13px; margin-bottom: 6px; }
+.property-popup footer { padding: 9px 14px; border-top: 1px solid #e0e6dc; }
+.attribute-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+.attribute-table th, .attribute-table td { padding: 8px 4px; border-bottom: 1px solid #edf0e9; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.attribute-table th { width: 38%; color: #657269; font-weight: 500; }
+.attribute-link { display: inline-block; border: 0; padding: 3px 0; margin-right: 8px; background: transparent; color: #176843; cursor: pointer; text-align: left; overflow-wrap: anywhere; font: inherit; text-decoration: underline; }
+.popup-body summary { cursor: pointer; padding: 7px 0; font-size: 12px; }
+.segment-details { margin-left: 10px; }
 .panel { padding: 20px 18px; overflow: auto; background: #f8faf6; }
 .layers-panel { border-right: 1px solid #cad1c9; }
 .inspector-panel { border-left: 1px solid #cad1c9; }
@@ -102,5 +119,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid #d98814; outline-
 }
 
 @media (max-width: 1250px) {
-  .workspace { grid-template-columns: 245px minmax(520px, 1fr) 295px; }
+  .workspace { grid-template-columns: 245px minmax(520px, 1fr); }
+  .workspace.with-inspector { grid-template-columns: 245px minmax(440px, 1fr) 295px; }
 }

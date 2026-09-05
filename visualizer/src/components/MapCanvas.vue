@@ -3,7 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { Deck, OrthographicView } from "@deck.gl/core";
 import type { OrthographicViewState, PickingInfo } from "@deck.gl/core";
 import Flatbush from "flatbush";
-import type { LayerName } from "../model";
+import type { LayerName, Point3d } from "../model";
+import PropertyPopup from "./PropertyPopup.vue";
 import type { LodLevel, PreparedMap, RenderFeature } from "../render/types";
 import { buildLayers } from "../render/layers";
 
@@ -12,9 +13,32 @@ const props = defineProps<{
   visibility: Record<LayerName, boolean>;
   selectedKey: string;
   resetRevision: number;
+  focusRevision: number;
+  queryMode: "table" | "json";
+  selectionAnchor?: Point3d;
 }>();
-const emit = defineEmits<{ candidates: [keys: string[]] }>();
+const emit = defineEmits<{ candidates: [keys: string[], anchor?: Point3d]; select: [key: string]; close: []; json: [] }>();
 const host = ref<HTMLDivElement>();
+const popupStyle = ref({ left: "16px", top: "64px" });
+const selected = computed(() => props.prepared?.features.find(f => f.key === props.selectedKey));
+let resizeObserver: ResizeObserver | undefined;
+
+function positionPopup(): void {
+  if (!host.value) return;
+  const width = host.value.clientWidth;
+  const height = host.value.clientHeight;
+  const point = props.selectionAnchor ?? selected.value?.position;
+  const target = currentView.target ?? [0, 0, 0];
+  const scale = 2 ** (typeof currentView.zoom === "number" ? currentView.zoom : 0);
+  const x = point ? width / 2 + (point[0] - target[0]) * scale : width;
+  const y = point ? height / 2 - (point[1] - target[1]) * scale : 64;
+  const popupWidth = Math.min(360, width - 24);
+  const popupHeight = Math.min(480, height - 80);
+  popupStyle.value = {
+    left: `${Math.max(12, Math.min(x + 16, width - popupWidth - 12))}px`,
+    top: `${Math.max(64, Math.min(y + 12, height - popupHeight - 12))}px`,
+  };
+}
 let deck: Deck<OrthographicView> | undefined;
 let currentView: OrthographicViewState = { target: [0, 0, 0], zoom: 0, minZoom: -8, maxZoom: 5 };
 let dragging = false;
@@ -81,6 +105,7 @@ function apply(reset = false): void {
   if (reset) currentView = fitState();
   if (host.value) host.value.dataset.viewZoom = String(currentView.zoom);
   deck.setProps({ viewState: currentView, layers: layers() });
+  positionPopup();
   if (host.value) host.value.dataset.viewportZoom = String(deck.getViewports()[0]?.zoom ?? "");
 }
 
@@ -111,9 +136,12 @@ onMounted(() => {
         const feature = pickedFeature(item);
         if (feature && !keys.includes(feature.key)) keys.push(feature.key);
       }
-      emit("candidates", keys);
+      const coordinate = deck.getViewports()[0]?.unproject([info.x, info.y]);
+      emit("candidates", keys, coordinate ? [coordinate[0], coordinate[1], 0] : undefined);
     },
   });
+  resizeObserver = new ResizeObserver(() => { scheduleApply(); });
+  resizeObserver.observe(host.value);
 });
 
 watch(() => props.prepared, (prepared) => {
@@ -122,15 +150,17 @@ watch(() => props.prepared, (prepared) => {
 });
 watch(() => [props.visibility, props.selectedKey] as const, () => apply(), { deep: true });
 watch(() => props.resetRevision, () => apply(true));
-watch(() => props.selectedKey, (key) => {
-  const feature = props.prepared?.features.find((item) => item.key === key);
+watch(() => props.focusRevision, () => {
+  const feature = selected.value;
   if (!feature?.bounds || !deck) return;
   currentView = fitState(feature.bounds);
-  deck.setProps({ viewState: currentView, layers: layers() });
+  apply();
 });
+watch(() => [props.selectionAnchor, props.selectedKey, props.queryMode], positionPopup, { flush: "post" });
 
 onBeforeUnmount(() => {
   if (updateFrame) cancelAnimationFrame(updateFrame);
+  resizeObserver?.disconnect();
   deck?.finalize();
   deck = undefined;
 });
@@ -138,4 +168,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="host" class="map-canvas" aria-label="Canonical 地图 WebGL 画布"></div>
+  <PropertyPopup v-if="queryMode === 'table' && selected && prepared"
+    :style="popupStyle" :selected="selected" :features="prepared.features"
+    @select="emit('select', $event)" @close="emit('close')" @json="emit('json')" />
 </template>

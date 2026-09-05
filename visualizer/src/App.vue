@@ -15,6 +15,7 @@ const store = useMapStore();
 const {
   prepared, source, loading, error, selectedKey, selected, candidates,
   searchQuery, searchResults, resetViewRevision, layerVisibility,
+  queryMode, selectionAnchor, focusRevision,
 } = storeToRefs(store);
 const worker = new MapWorkerClient();
 
@@ -63,6 +64,10 @@ onBeforeUnmount(() => worker.dispose());
       <h1>AutoMapOps Visualizer</h1>
     </div>
     <div class="toolbar">
+      <div class="query-modes" role="group" aria-label="查询模式">
+        <button :aria-pressed="queryMode === 'table'" @click="store.setQueryMode('table')">属性表</button>
+        <button :aria-pressed="queryMode === 'json'" @click="store.setQueryMode('json')">原始 JSON</button>
+      </div>
       <label class="button primary" for="map-file">打开 JSON</label>
       <input id="map-file" type="file" accept="application/json,.json" hidden @change="openFile" />
       <button class="button" type="button" @click="loadDemo">加载物流园示例</button>
@@ -70,7 +75,7 @@ onBeforeUnmount(() => worker.dispose());
     </div>
   </header>
 
-  <main class="workspace">
+  <main class="workspace" :class="{ 'with-inspector': queryMode === 'json' }">
     <aside class="panel layers-panel">
       <section>
         <p class="section-label">当前地图</p>
@@ -106,16 +111,22 @@ onBeforeUnmount(() => worker.dispose());
         :visibility="layerVisibility"
         :selected-key="selectedKey"
         :reset-revision="resetViewRevision"
+        :focus-revision="focusRevision"
+        :query-mode="queryMode"
+        :selection-anchor="selectionAnchor"
         @candidates="store.showCandidates"
+        @select="store.select"
+        @close="store.clearSelection"
+        @json="store.setQueryMode('json')"
       />
       <CandidatePicker
         :candidates="candidates"
-        @select="store.select"
+        @select="store.selectCandidate"
         @close="store.showCandidates([])"
       />
       <div v-if="loading" class="loading-mask"><span></span><strong>正在处理地图数据</strong></div>
     </section>
 
-    <InspectorPanel :selected="selected" />
+    <InspectorPanel v-if="queryMode === 'json'" :selected="selected" @close="store.setQueryMode('table')" />
   </main>
 </template>

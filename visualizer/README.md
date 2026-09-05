@@ -79,7 +79,13 @@ python ..\examples\opendrive\opendrive_to_canonical_1_1.py `
 
 仓库中的 `maps/drafts/logistics_park_v0.json` 仍保持 Schema 1.0，也可直接打开。
 
-## 渲染说明
+## 对象查询
+
+工具栏提供「属性表 / 原始 JSON」两种模式，并在本机记住选择。默认属性表模式使用地图浮动卡片，显示中文字段、单位、关联对象链接和可展开的曲线段参数。点击地图保持视角；从列表或关联链接选择时定位对象。无几何对象显示在画布右上角。关闭卡片或点击地图空白处可清除选中。
+
+原始 JSON 模式展开右侧面板，提供完整字段和复制按钮；切换模式保留选中对象。属性表模式收起右侧面板以扩大地图空间。
+
+## 渲染实现
 
 `CanonicalCurveLayer` 的输入仍是原始 `PathGeometry3d`。Worker 会为 GPU 生成 coarse、medium、fine 三档自适应细分缓存；该缓存不替代或修改 Canonical 曲线数据。PathLayer 使用 typed array 二进制属性，避免为每个渲染顶点创建 JavaScript 对象。
 

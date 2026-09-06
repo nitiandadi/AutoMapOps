@@ -20,20 +20,90 @@ struct DirectedGeometry final {
     core::PathTraversal traversal{core::PathTraversal::forward};
 };
 
+struct ConnectionEndState final {
+    core::Point3d position;
+    double heading_rad{0.0};
+};
+
 [[nodiscard]] bool point_is_finite(const core::Point3d& point) noexcept {
     return std::isfinite(point.x) && std::isfinite(point.y) && std::isfinite(point.z);
 }
 
-[[nodiscard]] bool geometry_is_usable(const DirectedGeometry& geometry) noexcept {
-    const double length = core::path_planar_length(geometry.path);
-    if (!std::isfinite(length) ||
-        length < connection_geometry_thresholds::minimum_heading_segment_xy_m) {
-        return false;
+[[nodiscard]] double horizontal_distance(
+    const core::Point3d& first,
+    const core::Point3d& second) noexcept {
+    return std::hypot(second.x - first.x, second.y - first.y);
+}
+
+[[nodiscard]] std::optional<ConnectionEndState> polyline_end_state(
+    const core::Polyline3d& polyline,
+    core::PathTraversal traversal,
+    bool at_start) noexcept {
+    if (polyline.empty()) {
+        return std::nullopt;
     }
-    const auto start = core::path_start_state(geometry.path, geometry.traversal);
-    const auto end = core::path_end_state(geometry.path, geometry.traversal);
-    return point_is_finite(start.position) && point_is_finite(end.position) &&
-           std::isfinite(start.heading_rad) && std::isfinite(end.heading_rad);
+
+    const bool use_front =
+        (traversal == core::PathTraversal::forward) == at_start;
+    const core::Point3d& endpoint = use_front ? polyline.front() : polyline.back();
+    if (!point_is_finite(endpoint)) {
+        return std::nullopt;
+    }
+
+    for (std::size_t offset = 1U; offset < polyline.size(); ++offset) {
+        const std::size_t index = use_front ? offset : polyline.size() - 1U - offset;
+        const core::Point3d& candidate = polyline[index];
+        if (!point_is_finite(candidate)) {
+            return std::nullopt;
+        }
+        if (horizontal_distance(endpoint, candidate) <
+            connection_geometry_thresholds::minimum_polyline_heading_chord_xy_m) {
+            continue;
+        }
+
+        const core::Point3d& from = at_start ? endpoint : candidate;
+        const core::Point3d& to = at_start ? candidate : endpoint;
+        return ConnectionEndState{
+            .position = endpoint,
+            .heading_rad = std::atan2(to.y - from.y, to.x - from.x),
+        };
+    }
+    return std::nullopt;
+}
+
+[[nodiscard]] std::optional<ConnectionEndState> connection_end_state(
+    const DirectedGeometry& geometry,
+    bool at_start) noexcept {
+    if (const core::Polyline3d* polyline = geometry.path.polyline()) {
+        return polyline_end_state(*polyline, geometry.traversal, at_start);
+    }
+
+    const core::CompositeCurve3d* curve = geometry.path.composite_curve();
+    if (curve == nullptr || curve->segments.empty()) {
+        return std::nullopt;
+    }
+    const double length = core::path_planar_length(geometry.path);
+    if (!std::isfinite(length) || length <= 0.0) {
+        return std::nullopt;
+    }
+    const core::CurveState3d state = at_start
+        ? core::path_start_state(geometry.path, geometry.traversal)
+        : core::path_end_state(geometry.path, geometry.traversal);
+    if (!point_is_finite(state.position) || !std::isfinite(state.heading_rad)) {
+        return std::nullopt;
+    }
+    return ConnectionEndState{
+        .position = state.position,
+        .heading_rad = state.heading_rad,
+    };
+}
+
+[[nodiscard]] double maximum_heading_difference(
+    const DirectedGeometry& source,
+    const DirectedGeometry& target) noexcept {
+    return source.path.is_composite_curve() && target.path.is_composite_curve()
+        ? connection_geometry_thresholds::maximum_curve_heading_difference_rad
+        : connection_geometry_thresholds::maximum_polyline_heading_difference_rad;
 }
 
 [[nodiscard]] double heading_difference(double first, double second) noexcept {
@@ -70,23 +140,21 @@ void check_connection(
     const DirectedGeometry& target,
     std::string_view rule_id,
     ValidationReport& report) {
-    if (!geometry_is_usable(source) || !geometry_is_usable(target)) {
+    const auto source_end = connection_end_state(source, false);
+    const auto target_start = connection_end_state(target, true);
+    if (!source_end || !target_start) {
         add_error(
             rule_id, source_id,
             std::string(connection_type) + " '" + std::string(source_id) + "' → '" +
                 std::string(target_id) +
-                "' 的路径缺少可形成 XY 切向的有效长度，无法计算连接航向。",
-            "补充至少两个 XY 位置不同的有效点，或修正曲线长度和非有限坐标。",
+                "' 的路径缺少可计算的 XY 连接切线，无法计算连接航向。",
+            "点列路径应提供距连接端至少 0.01 m 的有效 XY 点；连续曲线应修正曲线段和非有限参数。",
             report);
         return;
     }
 
-    const core::CurveState3d source_end = core::path_end_state(
-        source.path, source.traversal);
-    const core::CurveState3d target_start = core::path_start_state(
-        target.path, target.traversal);
     const double endpoint_distance = core::distance(
-        source_end.position, target_start.position);
+        source_end->position, target_start->position);
     if (endpoint_distance > connection_geometry_thresholds::maximum_endpoint_distance_m) {
         add_error(
             rule_id, source_id,
@@ -98,15 +166,19 @@ void check_connection(
     }
 
     const double difference = heading_difference(
-        source_end.heading_rad, target_start.heading_rad);
-    if (difference > connection_geometry_thresholds::maximum_heading_difference_rad) {
+        source_end->heading_rad, target_start->heading_rad);
+    const double maximum_difference = maximum_heading_difference(source, target);
+    if (difference > maximum_difference) {
         const double degrees = difference * 180.0 / std::numbers::pi_v<double>;
+        const double maximum_degrees =
+            maximum_difference * 180.0 / std::numbers::pi_v<double>;
         add_error(
             rule_id, source_id,
             std::string(connection_type) + " '" + std::string(source_id) + "' → '" +
                 std::string(target_id) + "' 的行驶航向差为 " +
                 format_number(difference, 3) + " rad（" + format_number(degrees, 1) +
-                "°），超过 0.524 rad（30°）。",
+                "°），超过 " + format_number(maximum_difference, 3) + " rad（" +
+                format_number(maximum_degrees, 1) + "°）。",
             "调整连接端附近的几何或修正拓扑关系，使行驶航向连续。", report);
     }
 }

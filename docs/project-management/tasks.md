@@ -68,7 +68,7 @@ M2 完成标准：V0 不是只有几何的 GeoJSON，而是一张包含明确坐
 | ✅ | M3-05 | 实现引用完整性规则 | 已检查当前模型的全部显式 ID 引用，不存在的道路、车道、边界、连接、站点接入车道和车辆模型引用均产生 Error |
 | ✅ | M3-06 | 实现基础几何规则 | 已检查点数、长度、相邻重合点、XY 自相交、区域闭合与面积、Lane 宽度、WGS84 原点和 ENU 坐标范围 |
 | ✅ | M3-07 | 实现拓扑互反规则 | 已检查 Road/Lane 前驱后继互反，以及 Road-Lane、Junction-LaneConnection 双向所有权一致性 |
-| ✅ | M3-08 | 实现连接几何规则 | 已按行驶方向检查 Road、Lane 和显式 LaneConnection，端点距离容差 0.5 m、XY 航向差容差 30° |
+| ✅ | M3-08 | 实现连接几何规则 | 已按行驶方向检查 Road、Lane 和显式 LaneConnection；端点距离容差 0.5 m，曲线—曲线使用解析切线和 10° 航向容差，涉及点列时使用 30° |
 | ✅ | M3-09 | 实现路网可达性规则 | Warehouse 场景中至少一个车辆模型可从 Gate Station 沿开放、宽度足够且满足限行白名单的 Lane 路径到达每个 LoadingBay Station |
 | ⬜ | M3-10 | 生成质检报告 | 输出 `validation-report.json`，包含等级、对象 ID、原因和建议 |
 | ⬜ | M3-11 | 实现版本发布 | 只有 Fatal 和 Error 均为 0 时才能生成 V1 |

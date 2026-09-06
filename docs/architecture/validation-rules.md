@@ -114,13 +114,14 @@ LaneConnection.junctionId 指向 Junction
 
 连接几何规则检查拓扑相连对象在空间上能否形成连续行驶连接。不满足容差时产生 Error 并阻止发布。
 
-首版固定容差：
+默认容差：
 
 | 检查项 | 容差 |
 |---|---:|
 | 前一对象行驶终点到后一对象行驶起点的三维距离 | ≤ 0.5 m |
-| 两侧连接端的 XY 行驶航向差 | ≤ 30°，约 0.524 rad |
-| 用于计算航向的端部 XY 方向线段 | ≥ 0.01 m |
+| 两侧均为 `composite_curve` 时的 XY 切线航向差 | ≤ 10°，约 0.175 rad |
+| 至少一侧为点列路径时的 XY 切线航向差 | ≤ 30°，约 0.524 rad |
+| 点列路径用于估算航向的端部 XY 弦长 | ≥ 0.01 m |
 
 Road 按 `referenceLine` 的存储方向从起点连接到 successor 起点。Lane 必须考虑 `direction`：
 
@@ -129,7 +130,9 @@ Road 按 `referenceLine` 的存储方向从起点连接到 successor 起点。La
 
 规则检查 Road 的 successor 连接、Lane 的 successor 连接，以及每个 LaneConnection 的 `incomingLaneId → connectingLaneId → outgoingLaneId`。如果同一 Lane 对已经由 successor 和 LaneConnection 同时表达，只检查一次，避免重复问题。
 
-航向使用连接端向内寻找的第一段 XY 长度至少 0.01 m 的线段计算，Z 不参与航向角。如果两侧几何有效但找不到可用 XY 方向线段，规则报告“无法计算连接航向”。端点距离仍使用三维距离，因此高程突跳不会被忽略。
+`composite_curve` 直接使用连接端的解析切线航向；点列路径从连接端向内寻找弦长至少 0.01 m 的有效点来估算航向。只要连接任一侧为点列，就使用较宽松的 30° 容差；两侧都是连续曲线时使用 10° 容差。如果无法获得可用切线，规则报告“无法计算连接航向”。Z 不参与航向角，但端点距离仍使用三维距离，因此高程突跳不会被忽略。
+
+`composite_curve` 内部相邻 segment 的 G0 位置连续和 G1 航向连续由 `M3_BASIC_GEOMETRY` 检查，G2 曲率突变由该规则生成 Warning；本规则只负责不同 Road/Lane 对象之间的连接端连续性。
 
 目标对象不存在或基础几何包含点数不足、NaN 等问题时，本规则跳过相应连接，分别交给引用完整性和基础几何规则报告。连接关系是否双向声明则由拓扑互反规则负责。
 

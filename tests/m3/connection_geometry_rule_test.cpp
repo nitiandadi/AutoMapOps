@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <numbers>
 #include <string>
 #include <string_view>
 
@@ -169,6 +170,89 @@ int main() {
     passed &= check(
         !reported_missing_target,
         "目标不存在的问题应留给引用完整性规则，不应重复报告。");
+
+    MapData curve_tolerance_map;
+    curve_tolerance_map.header.map_id = MapId{"curve_connection_tolerance"};
+    curve_tolerance_map.roads.push_back({
+        .id = "curve_source",
+        .reference_line = automap::core::CompositeCurve3d{.segments = {
+            automap::core::LineCurveSegment3d{
+                .start = {0.0, 0.0, 0.0},
+                .heading_rad = 0.0,
+                .length_m = 10.0,
+                .end_z_m = 0.0,
+            },
+        }},
+        .successor_ids = {"curve_target"},
+    });
+    curve_tolerance_map.roads.push_back({
+        .id = "curve_target",
+        .reference_line = automap::core::CompositeCurve3d{.segments = {
+            automap::core::LineCurveSegment3d{
+                .start = {10.0, 0.0, 0.0},
+                .heading_rad = std::numbers::pi_v<double> / 12.0,
+                .length_m = 10.0,
+                .end_z_m = 0.0,
+            },
+        }},
+    });
+
+    ValidationReport curve_tolerance_report{curve_tolerance_map.header.map_id};
+    rule.validate(
+        ValidationContext{.map = curve_tolerance_map}, curve_tolerance_report);
+    passed &= check(
+        curve_tolerance_report.count(Severity::error) == 1U &&
+            curve_tolerance_report.issues().front().message.find("10.0°") !=
+                std::string::npos,
+        "连续曲线之间 15° 的解析切线航向差应超过 10° 容差。");
+
+    MapData mixed_geometry_map;
+    mixed_geometry_map.header.map_id = MapId{"mixed_connection_tolerance"};
+    mixed_geometry_map.roads.push_back({
+        .id = "polyline_source",
+        .reference_line = {{0.0, 0.0, 0.0}, {10.0, 0.0, 0.0}},
+        .successor_ids = {"curve_target"},
+    });
+    mixed_geometry_map.roads.push_back(curve_tolerance_map.roads.back());
+
+    ValidationReport mixed_geometry_report{mixed_geometry_map.header.map_id};
+    rule.validate(
+        ValidationContext{.map = mixed_geometry_map}, mixed_geometry_report);
+    passed &= check(
+        mixed_geometry_report.issues().empty(),
+        "涉及点列路径时 15° 航向差应使用较宽松的 30° 容差。");
+
+    MapData short_curve_map;
+    short_curve_map.header.map_id = MapId{"short_curve_connection"};
+    short_curve_map.roads.push_back({
+        .id = "short_curve_source",
+        .reference_line = automap::core::CompositeCurve3d{.segments = {
+            automap::core::LineCurveSegment3d{
+                .start = {0.0, 0.0, 0.0},
+                .heading_rad = 0.0,
+                .length_m = 0.005,
+                .end_z_m = 0.0,
+            },
+        }},
+        .successor_ids = {"short_curve_target"},
+    });
+    short_curve_map.roads.push_back({
+        .id = "short_curve_target",
+        .reference_line = automap::core::CompositeCurve3d{.segments = {
+            automap::core::LineCurveSegment3d{
+                .start = {0.005, 0.0, 0.0},
+                .heading_rad = 0.0,
+                .length_m = 0.005,
+                .end_z_m = 0.0,
+            },
+        }},
+    });
+
+    ValidationReport short_curve_report{short_curve_map.header.map_id};
+    rule.validate(ValidationContext{.map = short_curve_map}, short_curve_report);
+    passed &= check(
+        short_curve_report.issues().empty(),
+        "解析曲线切线不应受点列路径 0.01 m 取向弦长限制。");
 
     if (!passed) {
         return 1;

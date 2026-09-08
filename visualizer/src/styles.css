@@ -78,7 +78,9 @@ button:focus-visible, input:focus-visible { outline: 2px solid #d98814; outline-
 .legend span { display: flex; align-items: center; gap: 8px; font-size: 12px; }
 .swatch { width: 22px; height: 4px; display: inline-block; border-radius: 4px; background: #444; }
 .swatch.lane { background: #10849f; }
-.swatch.boundary { border-top: 2px dashed #de9724; background: none; }
+.swatch.boundary-solid { height: 2px; background: #de9724; }
+.swatch.boundary-dashed { height: 0; border-top: 2px dashed #de9724; border-radius: 0; background: none; }
+.swatch.boundary-virtual { height: 0; border-top: 2px dotted rgba(105, 119, 110, .72); border-radius: 0; background: none; }
 .swatch.road { background: #748179; }
 .swatch.warehouse { height: 12px; background: #4e845b; }
 .swatch.loading { height: 12px; background: #da8f2a; }

@@ -57,13 +57,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               0.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -292,7 +292,7 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 23.5
           }
         ]
       },
@@ -304,7 +304,9 @@
       ],
       "laneIds": [
         "lane_j10_main_inner",
-        "lane_j10_main_outer"
+        "lane_j10_main_inner_continuation",
+        "lane_j10_main_outer",
+        "lane_j10_main_outer_continuation"
       ]
     },
     {
@@ -334,7 +336,8 @@
         "road_detour"
       ],
       "laneIds": [
-        "lane_j10_detour"
+        "lane_j10_detour",
+        "lane_j10_detour_continuation"
       ]
     },
     {
@@ -346,13 +349,13 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               0.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 23.5
           }
         ]
       },
@@ -364,7 +367,9 @@
       ],
       "laneIds": [
         "lane_j20_main_inner",
-        "lane_j20_main_outer"
+        "lane_j20_main_inner_continuation",
+        "lane_j20_main_outer",
+        "lane_j20_main_outer_continuation"
       ]
     },
     {
@@ -394,7 +399,8 @@
         "road_exit"
       ],
       "laneIds": [
-        "lane_j20_detour"
+        "lane_j20_detour",
+        "lane_j20_detour_continuation"
       ]
     }
   ],
@@ -477,13 +483,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               -1.75,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -491,7 +497,9 @@
       "orderFromReference": 1,
       "leftBoundaryId": "boundary_main_0",
       "rightBoundaryId": "boundary_main_1",
-      "predecessorIds": [],
+      "predecessorIds": [
+        "lane_j10_main_inner_continuation"
+      ],
       "successorIds": [
         "lane_j20_main_inner"
       ],
@@ -509,13 +517,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               -5.25,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -523,7 +531,9 @@
       "orderFromReference": 2,
       "leftBoundaryId": "boundary_main_1",
       "rightBoundaryId": "boundary_main_2",
-      "predecessorIds": [],
+      "predecessorIds": [
+        "lane_j10_main_outer_continuation"
+      ],
       "successorIds": [
         "lane_j20_main_outer"
       ],
@@ -601,7 +611,9 @@
       "orderFromReference": 1,
       "leftBoundaryId": "boundary_detour_0",
       "rightBoundaryId": "boundary_detour_1",
-      "predecessorIds": [],
+      "predecessorIds": [
+        "lane_j10_detour_continuation"
+      ],
       "successorIds": [
         "lane_j20_detour"
       ],
@@ -633,7 +645,10 @@
       "orderFromReference": 1,
       "leftBoundaryId": "boundary_exit_0",
       "rightBoundaryId": "boundary_exit_1",
-      "predecessorIds": [],
+      "predecessorIds": [
+        "lane_j20_detour_continuation",
+        "lane_j20_main_inner_continuation"
+      ],
       "successorIds": [
         "lane_return_inner"
       ],
@@ -665,7 +680,9 @@
       "orderFromReference": 2,
       "leftBoundaryId": "boundary_exit_1",
       "rightBoundaryId": "boundary_exit_2",
-      "predecessorIds": [],
+      "predecessorIds": [
+        "lane_j20_main_outer_continuation"
+      ],
       "successorIds": [
         "lane_return_outer"
       ],
@@ -897,7 +914,7 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 12.338962679253065
           }
         ]
       },
@@ -907,6 +924,40 @@
       "rightBoundaryId": "boundary_j10_main_connector_1",
       "predecessorIds": [
         "lane_entry_inner"
+      ],
+      "successorIds": [
+        "lane_j10_main_inner_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.56
+    },
+    {
+      "id": "lane_j10_main_inner_continuation",
+      "roadId": "road_j10_main_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              62.338962679253065,
+              -1.75,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j10_main_connector_0_continuation",
+      "rightBoundaryId": "boundary_j10_main_connector_1_continuation",
+      "predecessorIds": [
+        "lane_j10_main_inner"
       ],
       "successorIds": [
         "lane_main_inner"
@@ -931,7 +982,7 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 12.338962679253065
           }
         ]
       },
@@ -941,6 +992,40 @@
       "rightBoundaryId": "boundary_j10_main_connector_2",
       "predecessorIds": [
         "lane_entry_outer"
+      ],
+      "successorIds": [
+        "lane_j10_main_outer_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.56
+    },
+    {
+      "id": "lane_j10_main_outer_continuation",
+      "roadId": "road_j10_main_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              62.338962679253065,
+              -5.25,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_j10_main_connector_1_continuation",
+      "rightBoundaryId": "boundary_j10_main_connector_2_continuation",
+      "predecessorIds": [
+        "lane_j10_main_outer"
       ],
       "successorIds": [
         "lane_main_outer"
@@ -965,7 +1050,7 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 34.16482010778896,
+            "lengthM": 12.023144337660504,
             "curvaturePerM": 0.04597701149425288
           }
         ]
@@ -976,6 +1061,41 @@
       "rightBoundaryId": "boundary_j10_detour_connector_1",
       "predecessorIds": [
         "lane_entry_inner"
+      ],
+      "successorIds": [
+        "lane_j10_detour_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.56
+    },
+    {
+      "id": "lane_j10_detour_continuation",
+      "roadId": "road_j10_detour_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              61.42010375632995,
+              1.4893617021276517,
+              0.0
+            ],
+            "headingRad": 0.5527882454096784,
+            "endZM": 0.0,
+            "lengthM": 22.141675770128458,
+            "curvaturePerM": 0.04597701149425288
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j10_detour_connector_0_continuation",
+      "rightBoundaryId": "boundary_j10_detour_connector_1_continuation",
+      "predecessorIds": [
+        "lane_j10_detour"
       ],
       "successorIds": [
         "lane_detour"
@@ -994,13 +1114,13 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               -1.75,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 11.161037320746935
           }
         ]
       },
@@ -1010,6 +1130,40 @@
       "rightBoundaryId": "boundary_j20_main_connector_1",
       "predecessorIds": [
         "lane_main_inner"
+      ],
+      "successorIds": [
+        "lane_j20_main_inner_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.33
+    },
+    {
+      "id": "lane_j20_main_inner_continuation",
+      "roadId": "road_j20_main_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              157.66103732074694,
+              -1.75,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 12.338962679253065
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j20_main_connector_0_continuation",
+      "rightBoundaryId": "boundary_j20_main_connector_1_continuation",
+      "predecessorIds": [
+        "lane_j20_main_inner"
       ],
       "successorIds": [
         "lane_exit_inner"
@@ -1028,13 +1182,13 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               -5.25,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 11.161037320746935
           }
         ]
       },
@@ -1044,6 +1198,40 @@
       "rightBoundaryId": "boundary_j20_main_connector_2",
       "predecessorIds": [
         "lane_main_outer"
+      ],
+      "successorIds": [
+        "lane_j20_main_outer_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.33
+    },
+    {
+      "id": "lane_j20_main_outer_continuation",
+      "roadId": "road_j20_main_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              157.66103732074694,
+              -5.25,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 12.338962679253065
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_j20_main_connector_1_continuation",
+      "rightBoundaryId": "boundary_j20_main_connector_2_continuation",
+      "predecessorIds": [
+        "lane_j20_main_outer"
       ],
       "successorIds": [
         "lane_exit_outer"
@@ -1068,7 +1256,7 @@
             ],
             "headingRad": -1.5707963267949,
             "endZM": 0.0,
-            "lengthM": 34.16482010778896,
+            "lengthM": 22.141675770128455,
             "curvaturePerM": 0.04597701149425288
           }
         ]
@@ -1079,6 +1267,41 @@
       "rightBoundaryId": "boundary_j20_detour_connector_1",
       "predecessorIds": [
         "lane_detour"
+      ],
+      "successorIds": [
+        "lane_j20_detour_continuation"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.56
+    },
+    {
+      "id": "lane_j20_detour_continuation",
+      "roadId": "road_j20_detour_connector",
+      "centerline": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              158.57989624366994,
+              1.489361702127649,
+              0.0
+            ],
+            "headingRad": -0.5527882454096837,
+            "endZM": 0.0,
+            "lengthM": 12.023144337660508,
+            "curvaturePerM": 0.04597701149425288
+          }
+        ]
+      },
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j20_detour_connector_0_continuation",
+      "rightBoundaryId": "boundary_j20_detour_connector_1_continuation",
+      "predecessorIds": [
+        "lane_j20_detour"
       ],
       "successorIds": [
         "lane_exit_inner"
@@ -1161,13 +1384,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               0.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -1182,13 +1405,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               -3.5,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -1203,13 +1426,13 @@
           {
             "type": "line",
             "start": [
-              55.0,
+              73.5,
               -7.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 110.0
+            "lengthM": 73.0
           }
         ]
       },
@@ -1700,12 +1923,33 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 12.338962679253065
           }
         ]
       },
       "type": "virtual_boundary",
       "crossingAllowed": true
+    },
+    {
+      "id": "boundary_j10_main_connector_0_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              62.338962679253065,
+              0.0,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
     },
     {
       "id": "boundary_j10_main_connector_1",
@@ -1721,7 +1965,28 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 12.338962679253065
+          }
+        ]
+      },
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_j10_main_connector_1_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              62.338962679253065,
+              -3.5,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 11.161037320746935
           }
         ]
       },
@@ -1742,7 +2007,28 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 12.338962679253065
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_main_connector_2_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              62.338962679253065,
+              -7.0,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 11.161037320746935
           }
         ]
       },
@@ -1763,13 +2049,35 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 31.4159265358979,
+            "lengthM": 11.055764908193568,
             "curvaturePerM": 0.05
           }
         ]
       },
-      "type": "virtual_boundary",
-      "crossingAllowed": true
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_detour_connector_0_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              60.50124483340686,
+              2.9787234042553123,
+              0.0
+            ],
+            "headingRad": 0.5527882454096784,
+            "endZM": 0.0,
+            "lengthM": 20.36016162770433,
+            "curvaturePerM": 0.05
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
     },
     {
       "id": "boundary_j10_detour_connector_1",
@@ -1785,7 +2093,29 @@
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 36.913713679680036,
+            "lengthM": 12.990523767127444,
+            "curvaturePerM": 0.0425531914893617
+          }
+        ]
+      },
+      "type": "virtual_boundary",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_j10_detour_connector_1_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              62.33896267925306,
+              -7.993605777301127e-15,
+              0.0
+            ],
+            "headingRad": 0.5527882454096784,
+            "endZM": 0.0,
+            "lengthM": 23.923189912552594,
             "curvaturePerM": 0.0425531914893617
           }
         ]
@@ -1801,13 +2131,34 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               0.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j20_main_connector_0_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              157.66103732074694,
+              0.0,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 12.338962679253065
           }
         ]
       },
@@ -1822,13 +2173,34 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               -3.5,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_j20_main_connector_1_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              157.66103732074694,
+              -3.5,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 12.338962679253065
           }
         ]
       },
@@ -1843,13 +2215,34 @@
           {
             "type": "line",
             "start": [
-              165.0,
+              146.5,
               -7.0,
               0.0
             ],
             "headingRad": 0.0,
             "endZM": 0.0,
-            "lengthM": 5.0
+            "lengthM": 11.161037320746935
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j20_main_connector_2_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "line",
+            "start": [
+              157.66103732074694,
+              -7.0,
+              0.0
+            ],
+            "headingRad": 0.0,
+            "endZM": 0.0,
+            "lengthM": 12.338962679253065
           }
         ]
       },
@@ -1870,13 +2263,35 @@
             ],
             "headingRad": -1.5707963267949,
             "endZM": 0.0,
-            "lengthM": 31.4159265358979,
+            "lengthM": 20.36016162770433,
             "curvaturePerM": 0.05
           }
         ]
       },
-      "type": "virtual_boundary",
-      "crossingAllowed": true
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j20_detour_connector_0_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              159.49875516659307,
+              2.9787234042553017,
+              0.0
+            ],
+            "headingRad": -0.5527882454096835,
+            "endZM": 0.0,
+            "lengthM": 11.05576490819357,
+            "curvaturePerM": 0.05
+          }
+        ]
+      },
+      "type": "solid_line",
+      "crossingAllowed": false
     },
     {
       "id": "boundary_j20_detour_connector_1",
@@ -1892,13 +2307,35 @@
             ],
             "headingRad": -1.5707963267949,
             "endZM": 0.0,
-            "lengthM": 36.913713679680036,
+            "lengthM": 23.92318991255259,
             "curvaturePerM": 0.0425531914893617
           }
         ]
       },
       "type": "solid_line",
       "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j20_detour_connector_1_continuation",
+      "geometry": {
+        "type": "composite_curve",
+        "segments": [
+          {
+            "type": "circular_arc",
+            "start": [
+              157.66103732074686,
+              -1.4210854715202004e-14,
+              0.0
+            ],
+            "headingRad": -0.5527882454096835,
+            "endZM": 0.0,
+            "lengthM": 12.990523767127446,
+            "curvaturePerM": 0.0425531914893617
+          }
+        ]
+      },
+      "type": "virtual_boundary",
+      "crossingAllowed": true
     }
   ],
   "junctions": [

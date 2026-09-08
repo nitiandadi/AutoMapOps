@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "changeSetId": "initial_logistics_park_V1",
+  "mapId": "logistics_park",
+  "baseMapVersion": null,
+  "type": "initial",
+  "title": "创建首个正式地图版本",
+  "reason": "由通过全部发布规则的 Canonical 草稿冻结生成",
+  "operations": [
+    {
+      "operationId": "initial_snapshot",
+      "action": "create",
+      "target": {"objectType": "map_snapshot", "objectId": "logistics_park"},
+      "before": null,
+      "after": {"mapFile": "map.json", "contentHash": "sha256:7b0cab94f20635ec1779467f2c9b1f31d309bbd12bf3a66829e4242acdaccb2a"}
+    }
+  ],
+  "status": "committed",
+  "validationReportId": "validation-report.json",
+  "createdAt": "2026-09-06T14:43:35Z",
+  "createdBy": "automap_cli",
+  "approvedAt": "2026-09-06T14:43:35Z",
+  "approvedBy": "automap_cli",
+  "resultingMapVersion": "V1"
+}

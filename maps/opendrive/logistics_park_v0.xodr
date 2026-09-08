@@ -59,7 +59,7 @@
         <userData code="automap.canonicalRoadId" value="road_entry" />
         <userData code="automap.exportRole" value="canonical_road" />
     </road>
-    <road name="Main Distribution Road" length="110" id="2" junction="-1" rule="RHT">
+    <road name="Main Distribution Road" length="73" id="2" junction="-1" rule="RHT">
         <link>
             <predecessor elementType="junction" elementId="10" />
             <successor elementType="junction" elementId="20" />
@@ -68,7 +68,7 @@
             <speed max="8.33" unit="m/s" />
         </type>
         <planView>
-            <geometry s="0" x="55" y="0" hdg="0" length="110">
+            <geometry s="0" x="73.5" y="0" hdg="0" length="73">
                 <line />
             </geometry>
         </planView>
@@ -316,7 +316,7 @@
         <userData code="automap.canonicalRoadId" value="road_return" />
         <userData code="automap.exportRole" value="canonical_road" />
     </road>
-    <road name="J10 Main Connector" length="5" id="101" junction="10" rule="RHT">
+    <road name="J10 Main Connector" length="23.5" id="101" junction="10" rule="RHT">
         <link>
             <predecessor elementType="road" elementId="1" contactPoint="end" />
             <successor elementType="road" elementId="2" contactPoint="start" />
@@ -325,7 +325,7 @@
             <speed max="5.56" unit="m/s" />
         </type>
         <planView>
-            <geometry s="0" x="50" y="0" hdg="0" length="5">
+            <geometry s="0" x="50" y="0" hdg="0" length="23.5">
                 <line />
             </geometry>
         </planView>
@@ -379,7 +379,9 @@
         <lanes>
             <laneSection s="0">
                 <center>
-                    <lane id="0" type="none" level="false" />
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
                 </center>
                 <right>
                     <lane id="-1" type="driving" level="false">
@@ -388,7 +390,7 @@
                             <successor id="-1" />
                         </link>
                         <width sOffset="0" a="3.5" b="0" c="0" d="0" />
-                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <roadMark sOffset="0" type="none" weight="standard" color="white" width="0.15" laneChange="both" />
                         <speed sOffset="0" max="5.56" />
                         <userData code="automap.canonicalLaneId" value="lane_j10_detour" />
                         <userData code="automap.exportRole" value="canonical_road" />
@@ -399,7 +401,7 @@
         <userData code="automap.canonicalRoadId" value="road_j10_detour_connector" />
         <userData code="automap.exportRole" value="canonical_road" />
     </road>
-    <road name="J20 Main Connector" length="5" id="201" junction="20" rule="RHT">
+    <road name="J20 Main Connector" length="23.5" id="201" junction="20" rule="RHT">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="4" contactPoint="start" />
@@ -408,7 +410,7 @@
             <speed max="5.56" unit="m/s" />
         </type>
         <planView>
-            <geometry s="0" x="165" y="0" hdg="0" length="5">
+            <geometry s="0" x="146.5" y="0" hdg="0" length="23.5">
                 <line />
             </geometry>
         </planView>
@@ -462,7 +464,9 @@
         <lanes>
             <laneSection s="0">
                 <center>
-                    <lane id="0" type="none" level="false" />
+                    <lane id="0" type="none" level="false">
+                        <roadMark sOffset="0" type="solid" weight="standard" color="yellow" width="0.15" laneChange="none" />
+                    </lane>
                 </center>
                 <right>
                     <lane id="-1" type="driving" level="false">
@@ -471,7 +475,7 @@
                             <successor id="-1" />
                         </link>
                         <width sOffset="0" a="3.5" b="0" c="0" d="0" />
-                        <roadMark sOffset="0" type="solid" weight="standard" color="white" width="0.15" laneChange="none" />
+                        <roadMark sOffset="0" type="none" weight="standard" color="white" width="0.15" laneChange="both" />
                         <speed sOffset="0" max="5.56" />
                         <userData code="automap.canonicalLaneId" value="lane_detour" />
                         <userData code="automap.exportRole" value="synthesized_merge_connector" />

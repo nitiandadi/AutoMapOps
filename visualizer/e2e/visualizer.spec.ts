@@ -39,7 +39,7 @@ test("从磁盘打开 OpenDRIVE 转换结果并绘制完整园区", async ({ pag
   await page.locator("#map-file").setInputFiles(jsonPath);
 
   await expect(page.getByText("物流园 OpenDRIVE 1.8 转换示例")).toBeVisible();
-  await expect(page.getByText(/logistics_park_from_opendrive_v1_1\.json · 83 个对象 · 64 条路径/)).toBeVisible();
+  await expect(page.getByText(/logistics_park_from_opendrive_v1_1\.json · 105 个对象 · 86 条路径/)).toBeVisible();
   await expect(page.getByRole("button", { name: /园区入口路/ })).toBeVisible();
   await expect(page.locator("canvas")).toBeVisible();
   const zoom = Number(await page.getByLabel("Canonical 地图 WebGL 画布").getAttribute("data-view-zoom"));

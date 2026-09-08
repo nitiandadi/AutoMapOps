@@ -2,7 +2,7 @@
 
 AutoMapOps 是一个面向自动驾驶地图学习的 C++20 练习项目，目标是在物流园、矿区等封闭场景中跑通地图生产、质检、版本发布、车端地图包和运行时消费的最小闭环。
 
-当前进度：M0、M1 和 M2 已完成；M3 已完成 Canonical JSON 读写、`inspect` 及 ID、引用、几何、拓扑和路网可达性质检规则，下一步生成质检报告。
+当前进度：M0～M3 已完成；物流园草稿已经过完整质检并冻结为首个不可覆盖的 MapVersion V1，下一阶段为 M4 地图编译与 MapPackage V1。
 
 ## 已实现
 
@@ -21,6 +21,9 @@ AutoMapOps 是一个面向自动驾驶地图学习的 C++20 练习项目，目�
 - Road/Lane 前驱后继及 Road-Lane、Junction-LaneConnection 双向所有权的拓扑互反规则；
 - 按行驶方向检查端点距离和 XY 航向差的连接几何规则；
 - Warehouse 场景中从 Gate 到 LoadingBay 的车辆约束可达性规则；
+- `validate` 质检报告命令，以及包含等级、对象 ID、原因和建议的结构化 JSON 报告；
+- `publish` 版本发布命令、规范化 SHA-256、原子目录发布和 MapVersion 不可变性验证；
+- [物流园 MapVersion V1](maps/versions/logistics_park/V1/manifest.json)，包含冻结地图、质检报告和初始 ChangeSet；
 - 独立的 `visualizer` Web 调试项目，可分图层查看内部地图模型并检查对象字段；
 - MSVC 构建与 CTest 自动测试。
 

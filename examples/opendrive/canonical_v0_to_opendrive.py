@@ -73,6 +73,7 @@ def add_lane_section(
     predecessor: bool,
     successor: bool,
     junction_connector: bool = False,
+    junction_outer_boundary: bool = False,
     export_role: str = "canonical_lane",
 ) -> None:
     lanes = ET.SubElement(road, "lanes")
@@ -81,7 +82,7 @@ def add_lane_section(
     center_lane = ET.SubElement(
         center, "lane", {"id": "0", "type": "none", "level": "false"}
     )
-    if not junction_connector:
+    if not junction_connector or junction_outer_boundary:
         ET.SubElement(
             center_lane,
             "roadMark",
@@ -127,11 +128,13 @@ def add_lane_section(
             "roadMark",
             {
                 "sOffset": "0",
-                "type": "broken" if lane_count > 1 and order == 1 else "solid",
+                "type": "none" if junction_connector and lane_count == 1 else (
+                    "broken" if lane_count > 1 and order == 1 else "solid"
+                ),
                 "weight": "standard",
                 "color": "white",
                 "width": "0.15",
-                "laneChange": "both" if lane_count > 1 and order == 1 else "none",
+                "laneChange": "both" if (junction_connector and lane_count == 1) or (lane_count > 1 and order == 1) else "none",
             },
         )
         ET.SubElement(
@@ -170,6 +173,7 @@ def create_road(
     lane_successor: bool,
     canonical_road_id: str,
     junction_connector: bool = False,
+    junction_outer_boundary: bool = False,
     export_role: str = "canonical_road",
     object_specs: list[dict] | None = None,
 ) -> None:
@@ -201,6 +205,7 @@ def create_road(
         lane_predecessor,
         lane_successor,
         junction_connector,
+        junction_outer_boundary,
         export_role,
     )
     if object_specs:
@@ -394,10 +399,12 @@ def build_opendrive(data: dict) -> ET.ElementTree:
              canonical_lane_ids=["lane_entry_inner", "lane_entry_outer"],
              lane_predecessor=True, lane_successor=False, canonical_road_id="road_entry",
              object_specs=entry_objects),
-        dict(road_id="2", name="Main Distribution Road", length=110.0, junction="-1",
+        # 路口覆盖转弯通道的整个横向展开范围（参考线半径 20 m + 车道宽 3.5 m）。
+        # 普通道路不能继续用不可跨越实线穿过该开口。
+        dict(road_id="2", name="Main Distribution Road", length=73.0, junction="-1",
              predecessor={"elementType": "junction", "elementId": "10"},
              successor={"elementType": "junction", "elementId": "20"}, speed_mps=8.33,
-             geometries=[("line", 0.0, 55.0, 0.0, 0.0, 110.0)],
+             geometries=[("line", 0.0, 73.5, 0.0, 0.0, 73.0)],
              canonical_lane_ids=["lane_main_inner", "lane_main_outer"],
              lane_predecessor=True, lane_successor=True, canonical_road_id="road_main"),
         dict(road_id="3", name="Loading Area Detour", length=174.247779607694, junction="-1",
@@ -431,10 +438,10 @@ def build_opendrive(data: dict) -> ET.ElementTree:
              ], canonical_lane_ids=["lane_return_inner", "lane_return_outer"],
              lane_predecessor=True, lane_successor=True, canonical_road_id="road_return",
              object_specs=return_objects),
-        dict(road_id="101", name="J10 Main Connector", length=5.0, junction="10",
+        dict(road_id="101", name="J10 Main Connector", length=23.5, junction="10",
              predecessor={"elementType": "road", "elementId": "1", "contactPoint": "end"},
              successor={"elementType": "road", "elementId": "2", "contactPoint": "start"},
-             speed_mps=5.56, geometries=[("line", 0.0, 50.0, 0.0, 0.0, 5.0)],
+             speed_mps=5.56, geometries=[("line", 0.0, 50.0, 0.0, 0.0, 23.5)],
              canonical_lane_ids=["lane_j10_main_inner", "lane_j10_main_outer"],
              lane_predecessor=True, lane_successor=True,
              canonical_road_id="road_j10_main_connector", junction_connector=True),
@@ -444,11 +451,11 @@ def build_opendrive(data: dict) -> ET.ElementTree:
              speed_mps=5.56, geometries=[("arc", 0.0, 50.0, 0.0, 0.0, 10 * PI, 0.05)],
              canonical_lane_ids=["lane_j10_detour"], lane_predecessor=True,
              lane_successor=True, canonical_road_id="road_j10_detour_connector",
-             junction_connector=True),
-        dict(road_id="201", name="J20 Main Connector", length=5.0, junction="20",
+             junction_connector=True, junction_outer_boundary=True),
+        dict(road_id="201", name="J20 Main Connector", length=23.5, junction="20",
              predecessor={"elementType": "road", "elementId": "2", "contactPoint": "end"},
              successor={"elementType": "road", "elementId": "4", "contactPoint": "start"},
-             speed_mps=5.56, geometries=[("line", 0.0, 165.0, 0.0, 0.0, 5.0)],
+             speed_mps=5.56, geometries=[("line", 0.0, 146.5, 0.0, 0.0, 23.5)],
              canonical_lane_ids=["lane_main_inner", "lane_main_outer"],
              lane_predecessor=True, lane_successor=True, canonical_road_id="road_main",
              junction_connector=True, export_role="synthesized_merge_connector"),
@@ -459,6 +466,7 @@ def build_opendrive(data: dict) -> ET.ElementTree:
              geometries=[("arc", 0.0, 150.0, 20.0, -PI / 2, 10 * PI, 0.05)],
              canonical_lane_ids=["lane_detour"], lane_predecessor=True,
              lane_successor=True, canonical_road_id="road_detour", junction_connector=True,
+             junction_outer_boundary=True,
              export_role="synthesized_merge_connector"),
     ]
     for spec in roads:

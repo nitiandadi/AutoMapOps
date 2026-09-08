@@ -1,0 +1,31 @@
+{
+  "sourceFormat": "OpenDRIVE",
+  "targetFormat": "CMJ 1.1",
+  "sourceCounts": {
+    "roads": 234,
+    "junctions": 31,
+    "laneSections": 708
+  },
+  "targetCounts": {
+    "roads": 234,
+    "lanes": 949,
+    "laneBoundaries": 1819,
+    "junctions": 31,
+    "laneConnections": 166
+  },
+  "excludedNonDrivingLaneRecords": {
+    "none": 27,
+    "parking": 3,
+    "shoulder": 195,
+    "sidewalk": 49
+  },
+  "unresolvedJunctionConnections": [],
+  "topologyDirectionWarnings": [],
+  "knownLosses": [
+    "CMJ 1.1 未保存 OpenDRIVE 非 driving 车道对象；其宽度仍参与可行驶车道横向定位。",
+    "CMJ 1.1 的 widthM 为区段中点宽度；中心线和边界几何使用完整宽度多项式采样。",
+    "道路标线颜色、宽度、材质和非对称组合未完整保留。",
+    "Road 参考线 Z 使用至多 10 m 的分段线性近似；Lane 和 LaneBoundary 的采样点使用原高程多项式。",
+    "OpenDRIVE 用户自定义 userData 未写入 CMJ 1.1。"
+  ]
+}

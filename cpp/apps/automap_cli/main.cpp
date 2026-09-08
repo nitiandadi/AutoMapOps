@@ -1,5 +1,8 @@
 #include "automap/core/geometry.hpp"
 #include "automap/io/canonical_json.hpp"
+#include "automap/validation/map_validator.hpp"
+#include "automap/validation/validation_report_json.hpp"
+#include "automap/version/version_publisher.hpp"
 
 #include <algorithm>
 #include <filesystem>
@@ -8,6 +11,7 @@
 #include <optional>
 #include <string_view>
 #include <type_traits>
+#include <utility>
 #include <variant>
 
 namespace {
@@ -150,6 +154,10 @@ void print_usage(std::string_view program) {
               << automap::io::canonical_json_format_name() << '\n';
     std::cout << "用法：\n";
     std::cout << "  " << program << " inspect <canonical-json-path>\n";
+    std::cout << "  " << program
+              << " validate <canonical-json-path> <validation-report-path>\n";
+    std::cout << "  " << program
+              << " publish <canonical-json-path> <version-directory> [version-id]\n";
 }
 
 int inspect_command(const std::filesystem::path& path) {
@@ -158,6 +166,58 @@ int inspect_command(const std::filesystem::path& path) {
         return 0;
     } catch (const automap::io::CanonicalJsonError& error) {
         std::cerr << "读取 Canonical 地图失败：" << error.what() << '\n';
+        return 1;
+    }
+}
+
+int validate_command(
+    const std::filesystem::path& map_path,
+    const std::filesystem::path& report_path) {
+    try {
+        const MapData map = automap::io::read_canonical_json_file(map_path);
+        const auto report = automap::validation::validate_map(map);
+        if (!report_path.parent_path().empty()) {
+            std::filesystem::create_directories(report_path.parent_path());
+        }
+        automap::validation::write_validation_report_json_file(report_path, report);
+        std::cout << "质检报告已写入：" << report_path.string() << '\n'
+                  << "Warning/Error/Fatal："
+                  << report.count(automap::validation::Severity::warning) << '/'
+                  << report.count(automap::validation::Severity::error) << '/'
+                  << report.count(automap::validation::Severity::fatal) << '\n';
+        return report.can_publish() ? 0 : 1;
+    } catch (const std::exception& error) {
+        std::cerr << "生成质检报告失败：" << error.what() << '\n';
+        return 1;
+    }
+}
+
+int publish_command(
+    const std::filesystem::path& map_path,
+    const std::filesystem::path& version_directory,
+    std::string version_id) {
+    try {
+        const MapData map = automap::io::read_canonical_json_file(map_path);
+        const auto report = automap::validation::validate_map(map);
+        const automap::version::VersionPublisher publisher;
+        const auto result = publisher.publish(
+            map, report,
+            {
+                .output_directory = version_directory,
+                .version_id = automap::version::VersionId{std::move(version_id)},
+            });
+        if (!result.published) {
+            std::cerr << "发布失败：" << result.message << '\n';
+            std::cerr << "Fatal/Error："
+                      << report.count(automap::validation::Severity::fatal) << '/'
+                      << report.count(automap::validation::Severity::error) << '\n';
+            return 1;
+        }
+        std::cout << "MapVersion 发布成功：" << result.output_directory.string() << '\n'
+                  << "内容哈希：" << result.content_hash << '\n';
+        return 0;
+    } catch (const std::exception& error) {
+        std::cerr << "发布 MapVersion 失败：" << error.what() << '\n';
         return 1;
     }
 }
@@ -176,6 +236,22 @@ int main(int argc, char* argv[]) {
             return 2;
         }
         return inspect_command(std::filesystem::path{argv[2]});
+    }
+    if (std::string_view{argv[1]} == "validate") {
+        if (argc != 4) {
+            std::cerr << "validate 命令需要地图路径和报告输出路径。\n";
+            print_usage(argv[0]);
+            return 2;
+        }
+        return validate_command(argv[2], argv[3]);
+    }
+    if (std::string_view{argv[1]} == "publish") {
+        if (argc != 4 && argc != 5) {
+            std::cerr << "publish 命令需要地图路径、版本目录和可选版本号。\n";
+            print_usage(argv[0]);
+            return 2;
+        }
+        return publish_command(argv[2], argv[3], argc == 5 ? argv[4] : "V1");
     }
 
     std::cerr << "未知命令：" << argv[1] << '\n';

@@ -8,6 +8,7 @@ Polygon、Station 与车辆白名单从配套 Canonical V0 源文件恢复，避
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import json
 import math
 from pathlib import Path
@@ -109,6 +110,171 @@ def canonical_road_ids(roads: list[ET.Element]) -> dict[str, str]:
         used.add(candidate)
         ids[odr_id] = candidate
     return ids
+
+
+def split_single_segment_path(path: dict, ratio: float) -> tuple[dict, dict]:
+    """按相同行进角度/长度比例切分本例的单段 line 或 arc。"""
+    if path.get("type") != "composite_curve" or len(path.get("segments", [])) != 1:
+        raise ValueError("物流园边界分段要求输入为单段 composite_curve")
+    segment = path["segments"][0]
+    if segment["type"] not in {"line", "circular_arc"}:
+        raise ValueError(f"物流园边界分段暂不支持 {segment['type']}")
+    if not 0.0 < ratio < 1.0:
+        raise ValueError("物流园边界分段比例必须位于 (0, 1)")
+
+    first = deepcopy(path)
+    second = deepcopy(path)
+    total_length = float(segment["lengthM"])
+    first_length = total_length * ratio
+    second_length = total_length - first_length
+    x, y, z = map(float, segment["start"])
+    heading = float(segment["headingRad"])
+    end_z = float(segment["endZM"])
+    split_z = z + (end_z - z) * ratio
+    if segment["type"] == "line":
+        split_x = x + first_length * math.cos(heading)
+        split_y = y + first_length * math.sin(heading)
+        split_heading = heading
+    else:
+        curvature = float(segment["curvaturePerM"])
+        split_heading = heading + curvature * first_length
+        split_x = x + (math.sin(split_heading) - math.sin(heading)) / curvature
+        split_y = y - (math.cos(split_heading) - math.cos(heading)) / curvature
+
+    first_segment = first["segments"][0]
+    first_segment["lengthM"] = first_length
+    first_segment["endZM"] = split_z
+    second_segment = second["segments"][0]
+    second_segment["start"] = [split_x, split_y, split_z]
+    second_segment["headingRad"] = split_heading
+    second_segment["lengthM"] = second_length
+    return first, second
+
+
+def split_connector_lane_and_boundaries(
+    result: dict,
+    road_id: str,
+    lane_ids: list[str],
+    boundary_styles: dict[str, tuple[tuple[str, bool], tuple[str, bool]]],
+    ratio: float,
+) -> None:
+    """切分 Connector Lane，使 CMJ 1.1 的单一边界类型与几何区段一致。"""
+    continuation_boundary_ids: dict[str, str] = {}
+    for boundary_id, (first_style, second_style) in boundary_styles.items():
+        boundary_index = next(
+            index
+            for index, boundary in enumerate(result["laneBoundaries"])
+            if boundary["id"] == boundary_id
+        )
+        boundary = result["laneBoundaries"][boundary_index]
+        first_geometry, second_geometry = split_single_segment_path(boundary["geometry"], ratio)
+        continuation = deepcopy(boundary)
+        continuation_id = f"{boundary_id}_continuation"
+        continuation_boundary_ids[boundary_id] = continuation_id
+        boundary["geometry"] = first_geometry
+        boundary["type"], boundary["crossingAllowed"] = first_style
+        continuation["id"] = continuation_id
+        continuation["geometry"] = second_geometry
+        continuation["type"], continuation["crossingAllowed"] = second_style
+        result["laneBoundaries"].insert(boundary_index + 1, continuation)
+
+    continuation_lane_ids: dict[str, str] = {}
+    for lane_id in lane_ids:
+        lane_index = next(
+            index for index, lane in enumerate(result["lanes"]) if lane["id"] == lane_id
+        )
+        lane = result["lanes"][lane_index]
+        if lane["direction"] != "along_reference_line":
+            raise ValueError(f"物流园 Connector Lane {lane_id} 的方向不是沿参考线")
+        first_centerline, second_centerline = split_single_segment_path(lane["centerline"], ratio)
+        continuation = deepcopy(lane)
+        continuation_id = f"{lane_id}_continuation"
+        continuation_lane_ids[lane_id] = continuation_id
+        original_successors = list(lane["successorIds"])
+
+        lane["centerline"] = first_centerline
+        lane["successorIds"] = [continuation_id]
+        continuation["id"] = continuation_id
+        continuation["centerline"] = second_centerline
+        continuation["leftBoundaryId"] = continuation_boundary_ids[lane["leftBoundaryId"]]
+        continuation["rightBoundaryId"] = continuation_boundary_ids[lane["rightBoundaryId"]]
+        continuation["predecessorIds"] = [lane_id]
+        continuation["successorIds"] = original_successors
+        result["lanes"].insert(lane_index + 1, continuation)
+
+        for successor_id in original_successors:
+            successor = next(item for item in result["lanes"] if item["id"] == successor_id)
+            updated_predecessors = [
+                continuation_id if value == lane_id else value
+                for value in successor["predecessorIds"]
+            ]
+            if continuation_id not in updated_predecessors:
+                updated_predecessors.append(continuation_id)
+            successor["predecessorIds"] = sorted(set(updated_predecessors))
+
+    road = next(item for item in result["roads"] if item["id"] == road_id)
+    expanded_lane_ids: list[str] = []
+    for lane_id in road["laneIds"]:
+        expanded_lane_ids.append(lane_id)
+        if lane_id in continuation_lane_ids:
+            expanded_lane_ids.append(continuation_lane_ids[lane_id])
+    road["laneIds"] = expanded_lane_ids
+
+
+def apply_logistics_connector_marking_segments(result: dict) -> None:
+    """补充 XODR 1.8 无法直接表达的路口边界分段语义。"""
+    outer_radius = 23.5
+    junction_offset = 20.0
+    opening_length = math.sqrt(outer_radius * outer_radius - junction_offset * junction_offset)
+    detour_split_ratio = math.acos(junction_offset / outer_radius) / (math.pi * 0.5)
+    main_split_ratio = opening_length / outer_radius
+
+    solid = ("solid_line", False)
+    dashed = ("dashed_line", True)
+    virtual = ("virtual_boundary", True)
+
+    split_connector_lane_and_boundaries(
+        result,
+        "road_j10_detour_connector",
+        ["lane_j10_detour"],
+        {
+            "boundary_j10_detour_connector_0": (solid, solid),
+            "boundary_j10_detour_connector_1": (virtual, solid),
+        },
+        detour_split_ratio,
+    )
+    split_connector_lane_and_boundaries(
+        result,
+        "road_j20_detour_connector",
+        ["lane_j20_detour"],
+        {
+            "boundary_j20_detour_connector_0": (solid, solid),
+            "boundary_j20_detour_connector_1": (solid, virtual),
+        },
+        1.0 - detour_split_ratio,
+    )
+    split_connector_lane_and_boundaries(
+        result,
+        "road_j10_main_connector",
+        ["lane_j10_main_inner", "lane_j10_main_outer"],
+        {
+            "boundary_j10_main_connector_0": (virtual, solid),
+            "boundary_j10_main_connector_1": (dashed, dashed),
+            "boundary_j10_main_connector_2": (solid, solid),
+        },
+        main_split_ratio,
+    )
+    split_connector_lane_and_boundaries(
+        result,
+        "road_j20_main_connector",
+        ["lane_j20_main_inner", "lane_j20_main_outer"],
+        {
+            "boundary_j20_main_connector_0": (solid, virtual),
+            "boundary_j20_main_connector_1": (dashed, dashed),
+            "boundary_j20_main_connector_2": (solid, solid),
+        },
+        1.0 - main_split_ratio,
+    )
 
 
 def convert(xodr_path: Path, semantics_path: Path) -> dict:
@@ -339,7 +505,7 @@ def convert(xodr_path: Path, semantics_path: Path) -> dict:
         lane["successorIds"] = sorted(lane_successors[lane_id])
 
     header = source["header"]
-    return {
+    result = {
         "$schema": "../../schemas/canonical-map-1.1.schema.json",
         "header": {
             **header,
@@ -357,6 +523,8 @@ def convert(xodr_path: Path, semantics_path: Path) -> dict:
         "restrictedAreas": source["restrictedAreas"],
         "vehicleProfiles": source["vehicleProfiles"],
     }
+    apply_logistics_connector_marking_segments(result)
+    return result
 
 
 def main() -> None:

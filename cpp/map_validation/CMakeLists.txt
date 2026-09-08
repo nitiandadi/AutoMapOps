@@ -3,19 +3,23 @@ add_library(automap_map_validation STATIC
     include/automap/validation/connection_geometry_rule.hpp
     include/automap/validation/network_reachability_rule.hpp
     include/automap/validation/map_validation.hpp
+    include/automap/validation/map_validator.hpp
     include/automap/validation/reference_integrity_rule.hpp
     include/automap/validation/topology_reciprocity_rule.hpp
     include/automap/validation/validation_issue.hpp
     include/automap/validation/validation_report.hpp
+    include/automap/validation/validation_report_json.hpp
     include/automap/validation/validation_rule.hpp
     include/automap/validation/unique_id_rule.hpp
     src/basic_geometry_rule.cpp
     src/connection_geometry_rule.cpp
+    src/map_validator.cpp
     src/network_reachability_rule.cpp
     src/reference_integrity_rule.cpp
     src/topology_reciprocity_rule.cpp
     src/unique_id_rule.cpp
     src/validation_report.cpp
+    src/validation_report_json.cpp
 )
 
 add_library(AutoMapOps::map_validation ALIAS automap_map_validation)

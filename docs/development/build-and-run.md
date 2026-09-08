@@ -86,6 +86,8 @@ AutoMapOps 0.1.0
 Canonical format: AutoMapOps Canonical JSON
 用法：
   automap_cli inspect <canonical-json-path>
+  automap_cli validate <canonical-json-path> <validation-report-path>
+  automap_cli publish <canonical-json-path> <version-directory> [version-id]
 ```
 
 ## 查看地图摘要
@@ -97,6 +99,21 @@ Canonical format: AutoMapOps Canonical JSON
 ```
 
 Visual Studio 多配置生成器通常需要在可执行文件路径中增加 `Debug` 或 `Release` 目录。读取失败返回退出码 1；命令或参数错误返回退出码 2。
+
+## 生成质检报告与发布 V1
+
+```powershell
+.\build\cpp\apps\automap_cli\automap_cli.exe validate `
+  .\maps\drafts\logistics_park_v0.json `
+  .\build\validation-report.json
+
+.\build\cpp\apps\automap_cli\automap_cli.exe publish `
+  .\maps\drafts\logistics_park_v0.json `
+  .\maps\versions\logistics_park\V1 `
+  V1
+```
+
+`validate` 在存在 Fatal 或 Error 时仍会写出报告，但返回退出码 1。`publish` 只有在 Fatal 和 Error 均为 0 时才创建版本目录，并拒绝覆盖已经存在的版本。
 
 如果Visual Studio使用多配置生成器，可执行文件通常位于`out/build/<配置>/cpp/apps/automap_cli/`或带`Debug`、`Release`子目录的位置，以Visual Studio输出窗口显示的构建路径为准。
 

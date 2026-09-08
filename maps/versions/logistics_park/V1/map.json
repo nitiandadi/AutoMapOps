@@ -1,0 +1,1710 @@
+{
+  "header": {
+    "mapId": "logistics_park",
+    "name": "物流园 Canonical V0 草稿",
+    "schemaVersion": "1.0",
+    "coordinateReference": {
+      "geodeticDatum": "WGS84",
+      "origin": {
+        "longitudeDeg": 104.0668,
+        "latitudeDeg": 30.572800000000001,
+        "altitudeM": 500
+      },
+      "localFrame": "enu",
+      "linearUnit": "m",
+      "angleUnit": "rad"
+    }
+  },
+  "roads": [
+    {
+      "id": "road_entry",
+      "name": "园区入口路",
+      "referenceLine": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          50,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_return"
+      ],
+      "successorIds": [
+        "road_j10_main_connector",
+        "road_j10_detour_connector"
+      ],
+      "laneIds": [
+        "lane_entry_inner",
+        "lane_entry_outer"
+      ]
+    },
+    {
+      "id": "road_j10_main_connector",
+      "name": "J10 主路直行连接道",
+      "referenceLine": [
+        [
+          50,
+          0,
+          0
+        ],
+        [
+          55,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_entry"
+      ],
+      "successorIds": [
+        "road_main"
+      ],
+      "laneIds": [
+        "lane_j10_main_inner",
+        "lane_j10_main_outer"
+      ]
+    },
+    {
+      "id": "road_j10_detour_connector",
+      "name": "J10 装卸区左转连接道",
+      "referenceLine": [
+        [
+          50,
+          0,
+          0
+        ],
+        [
+          57.653700000000001,
+          1.5224,
+          0
+        ],
+        [
+          64.142099999999999,
+          5.8578999999999999,
+          0
+        ],
+        [
+          68.477599999999995,
+          12.346299999999999,
+          0
+        ],
+        [
+          70,
+          20,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_entry"
+      ],
+      "successorIds": [
+        "road_detour"
+      ],
+      "laneIds": [
+        "lane_j10_detour"
+      ]
+    },
+    {
+      "id": "road_main",
+      "name": "园区主分拨路",
+      "referenceLine": [
+        [
+          55,
+          0,
+          0
+        ],
+        [
+          165,
+          0,
+          0
+        ],
+        [
+          170,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_j10_main_connector"
+      ],
+      "successorIds": [
+        "road_exit"
+      ],
+      "laneIds": [
+        "lane_main_inner",
+        "lane_main_outer"
+      ]
+    },
+    {
+      "id": "road_detour",
+      "name": "装卸区绕行路",
+      "referenceLine": [
+        [
+          70,
+          20,
+          0
+        ],
+        [
+          70,
+          50,
+          0
+        ],
+        [
+          78.786799999999999,
+          71.213200000000001,
+          0
+        ],
+        [
+          100,
+          80,
+          0
+        ],
+        [
+          120,
+          80,
+          0
+        ],
+        [
+          141.2132,
+          71.213200000000001,
+          0
+        ],
+        [
+          150,
+          50,
+          0
+        ],
+        [
+          150,
+          20,
+          0
+        ],
+        [
+          155.8579,
+          5.8578999999999999,
+          0
+        ],
+        [
+          170,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_j10_detour_connector"
+      ],
+      "successorIds": [
+        "road_exit"
+      ],
+      "laneIds": [
+        "lane_detour"
+      ]
+    },
+    {
+      "id": "road_exit",
+      "name": "园区出口段",
+      "referenceLine": [
+        [
+          170,
+          0,
+          0
+        ],
+        [
+          240,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_main",
+        "road_detour"
+      ],
+      "successorIds": [
+        "road_return"
+      ],
+      "laneIds": [
+        "lane_exit_inner",
+        "lane_exit_outer"
+      ]
+    },
+    {
+      "id": "road_return",
+      "name": "南侧回程闭环",
+      "referenceLine": [
+        [
+          240,
+          0,
+          0
+        ],
+        [
+          275.3553,
+          -14.6447,
+          0
+        ],
+        [
+          290,
+          -50,
+          0
+        ],
+        [
+          290,
+          -130,
+          0
+        ],
+        [
+          275.3553,
+          -165.3553,
+          0
+        ],
+        [
+          240,
+          -180,
+          0
+        ],
+        [
+          0,
+          -180,
+          0
+        ],
+        [
+          -35.3553,
+          -165.3553,
+          0
+        ],
+        [
+          -50,
+          -130,
+          0
+        ],
+        [
+          -50,
+          -50,
+          0
+        ],
+        [
+          -35.3553,
+          -14.6447,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "predecessorIds": [
+        "road_exit"
+      ],
+      "successorIds": [
+        "road_entry"
+      ],
+      "laneIds": [
+        "lane_return_inner",
+        "lane_return_outer"
+      ]
+    }
+  ],
+  "lanes": [
+    {
+      "id": "lane_entry_inner",
+      "roadId": "road_entry",
+      "centerline": [
+        [
+          0,
+          -1.75,
+          0
+        ],
+        [
+          50,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_entry_left",
+      "rightBoundaryId": "boundary_entry_middle",
+      "predecessorIds": [
+        "lane_return_inner"
+      ],
+      "successorIds": [
+        "lane_j10_main_inner",
+        "lane_j10_detour"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_entry_outer",
+      "roadId": "road_entry",
+      "centerline": [
+        [
+          0,
+          -5.25,
+          0
+        ],
+        [
+          50,
+          -5.25,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_entry_middle",
+      "rightBoundaryId": "boundary_entry_right",
+      "predecessorIds": [
+        "lane_return_outer"
+      ],
+      "successorIds": [
+        "lane_j10_main_outer"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_j10_main_inner",
+      "roadId": "road_j10_main_connector",
+      "centerline": [
+        [
+          50,
+          -1.75,
+          0
+        ],
+        [
+          55,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j10_main_left",
+      "rightBoundaryId": "boundary_j10_main_middle",
+      "predecessorIds": [
+        "lane_entry_inner"
+      ],
+      "successorIds": [
+        "lane_main_inner"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.5599999999999996
+    },
+    {
+      "id": "lane_j10_main_outer",
+      "roadId": "road_j10_main_connector",
+      "centerline": [
+        [
+          50,
+          -5.25,
+          0
+        ],
+        [
+          55,
+          -5.25,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_j10_main_middle",
+      "rightBoundaryId": "boundary_j10_main_right",
+      "predecessorIds": [
+        "lane_entry_outer"
+      ],
+      "successorIds": [
+        "lane_main_outer"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.5599999999999996
+    },
+    {
+      "id": "lane_j10_detour",
+      "roadId": "road_j10_detour_connector",
+      "centerline": [
+        [
+          50,
+          -1.75,
+          0
+        ],
+        [
+          58.323500000000003,
+          -0.094500000000000001,
+          0
+        ],
+        [
+          65.379499999999993,
+          4.6204999999999998,
+          0
+        ],
+        [
+          70.094499999999996,
+          11.676500000000001,
+          0
+        ],
+        [
+          71.75,
+          20,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_j10_detour_left",
+      "rightBoundaryId": "boundary_j10_detour_right",
+      "predecessorIds": [
+        "lane_entry_inner"
+      ],
+      "successorIds": [
+        "lane_detour"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.5599999999999996
+    },
+    {
+      "id": "lane_main_inner",
+      "roadId": "road_main",
+      "centerline": [
+        [
+          55,
+          -1.75,
+          0
+        ],
+        [
+          165,
+          -1.75,
+          0
+        ],
+        [
+          170,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_main_left",
+      "rightBoundaryId": "boundary_main_middle",
+      "predecessorIds": [
+        "lane_j10_main_inner"
+      ],
+      "successorIds": [
+        "lane_exit_inner"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_main_outer",
+      "roadId": "road_main",
+      "centerline": [
+        [
+          55,
+          -5.25,
+          0
+        ],
+        [
+          165,
+          -5.25,
+          0
+        ],
+        [
+          170,
+          -5.25,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_main_middle",
+      "rightBoundaryId": "boundary_main_right",
+      "predecessorIds": [
+        "lane_j10_main_outer"
+      ],
+      "successorIds": [
+        "lane_exit_outer"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_detour",
+      "roadId": "road_detour",
+      "centerline": [
+        [
+          71.75,
+          20,
+          0
+        ],
+        [
+          71.75,
+          50,
+          0
+        ],
+        [
+          80.024199999999993,
+          69.975800000000007,
+          0
+        ],
+        [
+          100,
+          78.25,
+          0
+        ],
+        [
+          120,
+          78.25,
+          0
+        ],
+        [
+          139.97579999999999,
+          69.975800000000007,
+          0
+        ],
+        [
+          148.25,
+          50,
+          0
+        ],
+        [
+          148.25,
+          20,
+          0
+        ],
+        [
+          154.62049999999999,
+          4.6204999999999998,
+          0
+        ],
+        [
+          170,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_detour_left",
+      "rightBoundaryId": "boundary_detour_right",
+      "predecessorIds": [
+        "lane_j10_detour"
+      ],
+      "successorIds": [
+        "lane_exit_inner"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 5.5599999999999996
+    },
+    {
+      "id": "lane_exit_inner",
+      "roadId": "road_exit",
+      "centerline": [
+        [
+          170,
+          -1.75,
+          0
+        ],
+        [
+          240,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_exit_left",
+      "rightBoundaryId": "boundary_exit_middle",
+      "predecessorIds": [
+        "lane_main_inner",
+        "lane_detour"
+      ],
+      "successorIds": [
+        "lane_return_inner"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_exit_outer",
+      "roadId": "road_exit",
+      "centerline": [
+        [
+          170,
+          -5.25,
+          0
+        ],
+        [
+          240,
+          -5.25,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_exit_middle",
+      "rightBoundaryId": "boundary_exit_right",
+      "predecessorIds": [
+        "lane_main_outer"
+      ],
+      "successorIds": [
+        "lane_return_outer"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_return_inner",
+      "roadId": "road_return",
+      "centerline": [
+        [
+          240,
+          -1.75,
+          0
+        ],
+        [
+          274.11790000000002,
+          -15.882099999999999,
+          0
+        ],
+        [
+          288.25,
+          -50,
+          0
+        ],
+        [
+          288.25,
+          -130,
+          0
+        ],
+        [
+          274.11790000000002,
+          -164.11789999999999,
+          0
+        ],
+        [
+          240,
+          -178.25,
+          0
+        ],
+        [
+          0,
+          -178.25,
+          0
+        ],
+        [
+          -34.117899999999999,
+          -164.11789999999999,
+          0
+        ],
+        [
+          -48.25,
+          -130,
+          0
+        ],
+        [
+          -48.25,
+          -50,
+          0
+        ],
+        [
+          -34.117899999999999,
+          -15.882099999999999,
+          0
+        ],
+        [
+          0,
+          -1.75,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 1,
+      "leftBoundaryId": "boundary_return_left",
+      "rightBoundaryId": "boundary_return_middle",
+      "predecessorIds": [
+        "lane_exit_inner"
+      ],
+      "successorIds": [
+        "lane_entry_inner"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    },
+    {
+      "id": "lane_return_outer",
+      "roadId": "road_return",
+      "centerline": [
+        [
+          240,
+          -5.25,
+          0
+        ],
+        [
+          271.64299999999997,
+          -18.356999999999999,
+          0
+        ],
+        [
+          284.75,
+          -50,
+          0
+        ],
+        [
+          284.75,
+          -130,
+          0
+        ],
+        [
+          271.64299999999997,
+          -161.643,
+          0
+        ],
+        [
+          240,
+          -174.75,
+          0
+        ],
+        [
+          0,
+          -174.75,
+          0
+        ],
+        [
+          -31.643000000000001,
+          -161.643,
+          0
+        ],
+        [
+          -44.75,
+          -130,
+          0
+        ],
+        [
+          -44.75,
+          -50,
+          0
+        ],
+        [
+          -31.643000000000001,
+          -18.356999999999999,
+          0
+        ],
+        [
+          0,
+          -5.25,
+          0
+        ]
+      ],
+      "side": "right",
+      "orderFromReference": 2,
+      "leftBoundaryId": "boundary_return_middle",
+      "rightBoundaryId": "boundary_return_right",
+      "predecessorIds": [
+        "lane_exit_outer"
+      ],
+      "successorIds": [
+        "lane_entry_outer"
+      ],
+      "direction": "along_reference_line",
+      "status": "open",
+      "widthM": 3.5,
+      "speedLimitMps": 8.3300000000000001
+    }
+  ],
+  "laneBoundaries": [
+    {
+      "id": "boundary_entry_left",
+      "geometry": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          50,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_entry_middle",
+      "geometry": [
+        [
+          0,
+          -3.5,
+          0
+        ],
+        [
+          50,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_entry_right",
+      "geometry": [
+        [
+          0,
+          -7,
+          0
+        ],
+        [
+          50,
+          -7,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_main_left",
+      "geometry": [
+        [
+          50,
+          0,
+          0
+        ],
+        [
+          55,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_main_middle",
+      "geometry": [
+        [
+          50,
+          -3.5,
+          0
+        ],
+        [
+          55,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_j10_main_right",
+      "geometry": [
+        [
+          50,
+          -7,
+          0
+        ],
+        [
+          55,
+          -7,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_detour_left",
+      "geometry": [
+        [
+          50,
+          0,
+          0
+        ],
+        [
+          57.653700000000001,
+          1.5224,
+          0
+        ],
+        [
+          64.142099999999999,
+          5.8578999999999999,
+          0
+        ],
+        [
+          68.477599999999995,
+          12.346299999999999,
+          0
+        ],
+        [
+          70,
+          20,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_j10_detour_right",
+      "geometry": [
+        [
+          50,
+          -3.5,
+          0
+        ],
+        [
+          58.993099999999998,
+          -1.7114,
+          0
+        ],
+        [
+          66.616799999999998,
+          3.3832,
+          0
+        ],
+        [
+          71.711399999999998,
+          11.0069,
+          0
+        ],
+        [
+          73.5,
+          20,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_main_left",
+      "geometry": [
+        [
+          55,
+          0,
+          0
+        ],
+        [
+          165,
+          0,
+          0
+        ],
+        [
+          170,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_main_middle",
+      "geometry": [
+        [
+          55,
+          -3.5,
+          0
+        ],
+        [
+          165,
+          -3.5,
+          0
+        ],
+        [
+          170,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_main_right",
+      "geometry": [
+        [
+          55,
+          -7,
+          0
+        ],
+        [
+          165,
+          -7,
+          0
+        ],
+        [
+          170,
+          -7,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_detour_left",
+      "geometry": [
+        [
+          70,
+          20,
+          0
+        ],
+        [
+          70,
+          50,
+          0
+        ],
+        [
+          78.786799999999999,
+          71.213200000000001,
+          0
+        ],
+        [
+          100,
+          80,
+          0
+        ],
+        [
+          120,
+          80,
+          0
+        ],
+        [
+          141.2132,
+          71.213200000000001,
+          0
+        ],
+        [
+          150,
+          50,
+          0
+        ],
+        [
+          150,
+          20,
+          0
+        ],
+        [
+          155.8579,
+          5.8578999999999999,
+          0
+        ],
+        [
+          170,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_detour_right",
+      "geometry": [
+        [
+          73.5,
+          20,
+          0
+        ],
+        [
+          73.5,
+          50,
+          0
+        ],
+        [
+          81.261700000000005,
+          68.738299999999995,
+          0
+        ],
+        [
+          100,
+          76.5,
+          0
+        ],
+        [
+          120,
+          76.5,
+          0
+        ],
+        [
+          138.73830000000001,
+          68.738299999999995,
+          0
+        ],
+        [
+          146.5,
+          50,
+          0
+        ],
+        [
+          146.5,
+          20,
+          0
+        ],
+        [
+          153.38319999999999,
+          3.3832,
+          0
+        ],
+        [
+          170,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_exit_left",
+      "geometry": [
+        [
+          170,
+          0,
+          0
+        ],
+        [
+          240,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_exit_middle",
+      "geometry": [
+        [
+          170,
+          -3.5,
+          0
+        ],
+        [
+          240,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_exit_right",
+      "geometry": [
+        [
+          170,
+          -7,
+          0
+        ],
+        [
+          240,
+          -7,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_return_left",
+      "geometry": [
+        [
+          240,
+          0,
+          0
+        ],
+        [
+          275.3553,
+          -14.6447,
+          0
+        ],
+        [
+          290,
+          -50,
+          0
+        ],
+        [
+          290,
+          -130,
+          0
+        ],
+        [
+          275.3553,
+          -165.3553,
+          0
+        ],
+        [
+          240,
+          -180,
+          0
+        ],
+        [
+          0,
+          -180,
+          0
+        ],
+        [
+          -35.3553,
+          -165.3553,
+          0
+        ],
+        [
+          -50,
+          -130,
+          0
+        ],
+        [
+          -50,
+          -50,
+          0
+        ],
+        [
+          -35.3553,
+          -14.6447,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "type": "solid_line",
+      "crossingAllowed": false
+    },
+    {
+      "id": "boundary_return_middle",
+      "geometry": [
+        [
+          240,
+          -3.5,
+          0
+        ],
+        [
+          272.88049999999998,
+          -17.119499999999999,
+          0
+        ],
+        [
+          286.5,
+          -50,
+          0
+        ],
+        [
+          286.5,
+          -130,
+          0
+        ],
+        [
+          272.88049999999998,
+          -162.88050000000001,
+          0
+        ],
+        [
+          240,
+          -176.5,
+          0
+        ],
+        [
+          0,
+          -176.5,
+          0
+        ],
+        [
+          -32.880499999999998,
+          -162.88050000000001,
+          0
+        ],
+        [
+          -46.5,
+          -130,
+          0
+        ],
+        [
+          -46.5,
+          -50,
+          0
+        ],
+        [
+          -32.880499999999998,
+          -17.119499999999999,
+          0
+        ],
+        [
+          0,
+          -3.5,
+          0
+        ]
+      ],
+      "type": "dashed_line",
+      "crossingAllowed": true
+    },
+    {
+      "id": "boundary_return_right",
+      "geometry": [
+        [
+          240,
+          -7,
+          0
+        ],
+        [
+          270.40559999999999,
+          -19.5944,
+          0
+        ],
+        [
+          283,
+          -50,
+          0
+        ],
+        [
+          283,
+          -130,
+          0
+        ],
+        [
+          270.40559999999999,
+          -160.40559999999999,
+          0
+        ],
+        [
+          240,
+          -173,
+          0
+        ],
+        [
+          0,
+          -173,
+          0
+        ],
+        [
+          -30.4056,
+          -160.40559999999999,
+          0
+        ],
+        [
+          -43,
+          -130,
+          0
+        ],
+        [
+          -43,
+          -50,
+          0
+        ],
+        [
+          -30.4056,
+          -19.5944,
+          0
+        ],
+        [
+          0,
+          -7,
+          0
+        ]
+      ],
+      "type": "curb",
+      "crossingAllowed": false
+    }
+  ],
+  "junctions": [
+    {
+      "id": "junction_route_split",
+      "name": "主路与装卸绕行路分流口",
+      "connectionIds": [
+        "connection_entry_inner_to_main",
+        "connection_entry_outer_to_main",
+        "connection_entry_inner_to_detour"
+      ]
+    }
+  ],
+  "laneConnections": [
+    {
+      "id": "connection_entry_inner_to_main",
+      "junctionId": "junction_route_split",
+      "incomingLaneId": "lane_entry_inner",
+      "connectingLaneId": "lane_j10_main_inner",
+      "outgoingLaneId": "lane_main_inner",
+      "turnDirection": "straight"
+    },
+    {
+      "id": "connection_entry_outer_to_main",
+      "junctionId": "junction_route_split",
+      "incomingLaneId": "lane_entry_outer",
+      "connectingLaneId": "lane_j10_main_outer",
+      "outgoingLaneId": "lane_main_outer",
+      "turnDirection": "straight"
+    },
+    {
+      "id": "connection_entry_inner_to_detour",
+      "junctionId": "junction_route_split",
+      "incomingLaneId": "lane_entry_inner",
+      "connectingLaneId": "lane_j10_detour",
+      "outgoingLaneId": "lane_detour",
+      "turnDirection": "left"
+    }
+  ],
+  "operationalAreas": [
+    {
+      "id": "area_warehouse_a",
+      "name": "A 仓库",
+      "type": "warehouse",
+      "outline": [
+        [
+          90,
+          84,
+          0
+        ],
+        [
+          130,
+          84,
+          0
+        ],
+        [
+          130,
+          110,
+          0
+        ],
+        [
+          90,
+          110,
+          0
+        ],
+        [
+          90,
+          84,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "area_loading_a",
+      "name": "A 仓装卸作业区",
+      "type": "loading_area",
+      "outline": [
+        [
+          102,
+          74,
+          0
+        ],
+        [
+          118,
+          74,
+          0
+        ],
+        [
+          118,
+          86,
+          0
+        ],
+        [
+          102,
+          86,
+          0
+        ],
+        [
+          102,
+          74,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "area_parking",
+      "name": "车辆待命停车区",
+      "type": "parking_area",
+      "outline": [
+        [
+          160,
+          -172,
+          0
+        ],
+        [
+          205,
+          -172,
+          0
+        ],
+        [
+          205,
+          -150,
+          0
+        ],
+        [
+          160,
+          -150,
+          0
+        ],
+        [
+          160,
+          -172,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "area_charging",
+      "name": "新能源车充电区",
+      "type": "charging_area",
+      "outline": [
+        [
+          20,
+          -172,
+          0
+        ],
+        [
+          48,
+          -172,
+          0
+        ],
+        [
+          48,
+          -152,
+          0
+        ],
+        [
+          20,
+          -152,
+          0
+        ],
+        [
+          20,
+          -172,
+          0
+        ]
+      ]
+    }
+  ],
+  "stations": [
+    {
+      "id": "station_gate",
+      "name": "园区门岗",
+      "type": "gate",
+      "position": [
+        10,
+        -1.75,
+        0
+      ],
+      "accessLaneId": "lane_entry_inner"
+    },
+    {
+      "id": "station_loading_a1",
+      "name": "A1 月台",
+      "type": "loading_bay",
+      "position": [
+        110,
+        78.25,
+        0
+      ],
+      "accessLaneId": "lane_detour"
+    },
+    {
+      "id": "station_parking_01",
+      "name": "1 号待命车位",
+      "type": "parking_space",
+      "position": [
+        182,
+        -164,
+        0
+      ],
+      "accessLaneId": "lane_return_inner"
+    },
+    {
+      "id": "station_charger_01",
+      "name": "1 号充电桩",
+      "type": "charging_point",
+      "position": [
+        34,
+        -162,
+        0
+      ],
+      "accessLaneId": "lane_return_inner"
+    }
+  ],
+  "restrictedAreas": [
+    {
+      "id": "restricted_narrow_passage",
+      "name": "装卸区北向窄通道",
+      "outline": [
+        [
+          68.5,
+          24,
+          0
+        ],
+        [
+          75,
+          24,
+          0
+        ],
+        [
+          75,
+          46,
+          0
+        ],
+        [
+          68.5,
+          46,
+          0
+        ],
+        [
+          68.5,
+          24,
+          0
+        ]
+      ],
+      "allowedVehicleProfileIds": [
+        "vehicle_delivery_van"
+      ]
+    }
+  ],
+  "vehicleProfiles": [
+    {
+      "id": "vehicle_delivery_van",
+      "name": "园区配送厢式车",
+      "type": "delivery_van",
+      "widthM": 2.1000000000000001,
+      "heightM": 2.7999999999999998,
+      "lengthM": 5.5,
+      "minimumTurningRadiusM": 6
+    },
+    {
+      "id": "vehicle_truck_12m",
+      "name": "12 米物流卡车",
+      "type": "truck",
+      "widthM": 2.5499999999999998,
+      "heightM": 4,
+      "lengthM": 12,
+      "minimumTurningRadiusM": 10.5
+    }
+  ]
+}

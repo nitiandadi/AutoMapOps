@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "mapId": "logistics_park",
+  "version": "V1",
+  "parentVersion": null,
+  "sourceChangeSetId": "initial_logistics_park_V1",
+  "status": "published",
+  "description": "首个正式逻辑地图版本",
+  "mapSchemaVersion": "1.0",
+  "coordinateReference": {
+    "geodeticDatum": "WGS84",
+    "origin": {
+      "longitudeDeg": 104.0668,
+      "latitudeDeg": 30.572800000000001,
+      "altitudeM": 500
+    },
+    "localFrame": "enu",
+    "linearUnit": "m",
+    "angleUnit": "rad"
+  },
+  "objectCounts": {
+    "roads": 7,
+    "lanes": 12,
+    "laneBoundaries": 19,
+    "junctions": 1,
+    "laneConnections": 3,
+    "operationalAreas": 4,
+    "stations": 4,
+    "restrictedAreas": 1,
+    "vehicleProfiles": 2
+  },
+  "validationSummary": {
+    "reportFile": "validation-report.json",
+    "warning": 0,
+    "error": 0,
+    "fatal": 0
+  },
+  "contentHash": "sha256:7b0cab94f20635ec1779467f2c9b1f31d309bbd12bf3a66829e4242acdaccb2a",
+  "createdAt": "2026-09-06T14:43:35Z",
+  "createdBy": "automap_cli",
+  "publishedAt": "2026-09-06T14:43:35Z",
+  "publishedBy": "automap_cli"
+}

@@ -24,6 +24,9 @@ function stableKey(kind: FeatureKind, index: number, id: string): string {
 
 function colorFor(kind: FeatureKind, value: MapObject | Record<string, unknown>): Color {
   if (kind === "Lane" && "status" in value && value.status === "closed") return [210, 73, 62, 255];
+  if (kind === "LaneBoundary" && "type" in value && value.type === "virtual_boundary") {
+    return [105, 119, 110, 145];
+  }
   if (kind === "OperationalArea" && "type" in value) {
     const areaColors: Record<string, Color> = {
       warehouse: [78, 132, 91, 115],
@@ -149,9 +152,14 @@ function buildPreparedMap(map: MapData): PreparedMap {
     const dash = boundary.type === "dashed_line"
       ? [8, 6] as [number, number]
       : boundary.type === "virtual_boundary"
-        ? [2, 4] as [number, number]
+        ? [1.5, 3.5] as [number, number]
         : undefined;
-    addPath("LaneBoundary", index, boundary, boundary.geometry, "boundaries", boundary.id, boundary.type === "curb" ? 4 : 2, dash);
+    const width = boundary.type === "curb"
+      ? 4
+      : boundary.type === "virtual_boundary"
+        ? 1.25
+        : 2;
+    addPath("LaneBoundary", index, boundary, boundary.geometry, "boundaries", boundary.id, width, dash);
   });
   map.operationalAreas.forEach((area, index) => {
     const feature = addObject("OperationalArea", index, area, "areas", pathMidpoint(area.outline));

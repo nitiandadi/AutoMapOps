@@ -151,6 +151,23 @@ add_test(
     COMMAND automap_cli inspect "${CMAKE_SOURCE_DIR}/maps/drafts/logistics_park_v0.json"
 )
 
+add_automap_test(
+    automap_m3_validation_report_json_test
+    m3/validation_report_json_test.cpp
+    automap.m3.validation_report_json
+    AutoMapOps::map_validation
+)
+
+add_automap_test(
+    automap_m3_version_publication_test
+    m3/version_publication_test.cpp
+    automap.m3.version_publication
+    AutoMapOps::map_version
+)
+target_compile_definitions(automap_m3_version_publication_test PRIVATE
+    AUTOMAP_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+)
+
 # CV：Canonical 1.1 曲线与 WebGL 可视化改造
 add_automap_test(
     automap_cv_curve_geometry_test

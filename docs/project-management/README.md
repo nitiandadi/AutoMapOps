@@ -26,9 +26,9 @@
 
 ## 当前状态
 
-更新时间：2026-09-01
+更新时间：2026-09-06
 
-当前阶段：**M3 Canonical IO、质检与 MapVersion V1（进行中）**
+当前阶段：**M3 Canonical IO、质检与 MapVersion V1（已完成）**
 
 当前结论：
 
@@ -41,9 +41,9 @@
 - 根 CMake 工程已经建立，并已使用 MSVC 和 C++20 完成配置验证；
 - `map_core` 静态库已经建立，并已成功生成 `automap_map_core.lib`；
 - `map_io` 静态库已经建立，显式依赖 `map_core`，并为 Canonical JSON 读写预留了公共接口；
-- `map_validation` 已提供问题等级、质检报告和规则抽象接口；
-- `map_version` 已提供版本 ID、发布结果与发布资格判断接口；
-- `automap_cli` 已建立并可输出程序名称、版本和 Canonical 格式名称；
+- `map_validation` 已提供统一规则执行、问题等级、质检报告及 JSON 写出；
+- `map_version` 已实现版本门槛、规范化 SHA-256、原子目录发布和快照复验；
+- `automap_cli` 已提供 `inspect`、`validate` 和 `publish` 命令；
 - CTest测试工程已经建立，M1冒烟测试覆盖核心模块联通和发布阻断逻辑；
 - 配置、编译、测试、CLI运行和Visual Studio打开方式已经形成构建说明；
 - 已完成 M2 Canonical Map Model 分层、所有权、引用和模块职责设计；
@@ -60,8 +60,11 @@
 - 已实现拓扑互反规则，覆盖 Road/Lane 前驱后继及 Road-Lane、Junction-LaneConnection 双向所有权；
 - 已实现连接几何规则，按实际行驶方向检查 Road、Lane 和显式 LaneConnection 的端点距离与 XY 航向差；
 - 已实现路网可达性规则，验证 Warehouse 场景中 Gate 到每个 LoadingBay 至少存在一条符合开放状态、宽度和限行白名单的车辆路径；
+- 已生成结构化 `validation-report.json`，包含等级、对象 ID、原因、建议和发布摘要；
+- 只有 Fatal 和 Error 均为 0 时才允许发布，已生成不可覆盖的物流园 MapVersion V1；
+- V1 已通过重新读取、内容哈希复算和源草稿修改隔离测试；
 - 测试源码已按 M1、M2、M3 里程碑分目录组织，CTest 名称保持相同阶段前缀；
-- 尚未产生 MapVersion V1 或 MapPackage V1。
+- 尚未产生 MapPackage V1。
 
 ## 进度看板
 
@@ -70,7 +73,7 @@
 | M0 | 项目定义与技术基线 | 已完成 | 8/8 | 数据契约、坐标约定、MVP 边界 |
 | M1 | C++ 最小工程架子 | 已完成 | 8/8 | 可编译、可测试的 C++20 工程 |
 | M2 | Canonical 模型与物流园 V0 | 已完成 | 10/10 | `logistics_park_v0.json` |
-| M3 | 质检与 MapVersion V1 | 进行中 | 9/12 | `MapVersion V1` 目录与质检报告 |
+| M3 | 质检与 MapVersion V1 | 已完成 | 12/12 | `MapVersion V1` 目录与质检报告 |
 | M4 | 地图编译与 MapPackage V1 | 未开始 | 0/11 | `manifest.json`、`map.bin`、空间索引 |
 | M5 | C++ Vehicle Map SDK | 未开始 | 0/10 | 加载、查询、匹配和路径规划 |
 | M6 | 地图生产 Web 平台 | 未开始 | 0/12 | Web 工作台与 C++ 平台服务 |
@@ -82,13 +85,7 @@
 
 ## 当前下一步
 
-按顺序只推进下面三项：
-
-1. `M3-10`：生成质检报告；
-2. `M3-11`：实现版本发布；
-3. `M3-12`：验证 MapVersion V1。
-
-M0、M1 和 M2 已完成，M3-01 至 M3-09 已完成，现在进入 `M3-10`。
+M0～M3 已完成。下一步进入 `M4-01`，设计车端运行时 Lane 结构；随后设计 MapPackage 文件格式和稳定 ID 编码。
 
 ## 里程碑依赖关系
 
@@ -162,3 +159,4 @@ M4 和 M5 完成后，首版地图生产与车端消费的最小纵向闭环才�
 | 2026-08-31 | 完成拓扑互反规则 | M3 完成 7/12，Road/Lane 前驱后继与两组所有权双向关系纳入 Error 检查，下一任务为 M3-08 |
 | 2026-08-31 | 完成连接几何规则 | M3 完成 8/12，Road、Lane 和显式连接按行驶方向检查 0.5 m 端点距离；曲线—曲线使用 10° 航向容差，涉及点列时使用 30°，下一任务为 M3-09 |
 | 2026-09-01 | 完成路网可达性规则 | M3 完成 9/12，配送厢式车可从门岗到达 A1 月台，关闭 Lane、车辆过宽或不满足白名单时均能阻断，下一任务为 M3-10 |
+| 2026-09-06 | 完成质检报告、版本发布与 V1 验证 | M3 完成 12/12，物流园 V1 已冻结并通过重新读取、SHA-256 稳定性和源草稿隔离测试，下一任务为 M4-01 |

@@ -1,7 +1,9 @@
 add_library(automap_map_version STATIC
+    include/automap/version/content_hash.hpp
     include/automap/version/map_version.hpp
     include/automap/version/version_id.hpp
     include/automap/version/version_publisher.hpp
+    src/content_hash.cpp
     src/version_id.cpp
     src/version_publisher.cpp
 )
@@ -17,6 +19,7 @@ target_include_directories(automap_map_version
 target_link_libraries(automap_map_version
     PUBLIC
         AutoMapOps::map_core
+        AutoMapOps::map_io
         AutoMapOps::map_validation
 )
 
